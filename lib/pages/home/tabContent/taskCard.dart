@@ -11,11 +11,55 @@ class TaskCard extends StatelessWidget{
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 9,horizontal:
       18),
-      child: Row(
-          children: [
-            Text(task.name),
-            Text(task.id.toString())
-          ]
+      child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(task.name),
+                  Text('Status:${task.status.toString()}'),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('Hash:${task.commitHash}'),
+                    Text('BuildDir:${task.buildDir}'),
+                    Text('RunTotal:${task.runTotal}'),
+                  ],
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Branch:${task.branch}'),
+                  Text('BuildCmd:${task.buildCommand}'),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('ID:${task.id.toString()}'),
+                  Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.play_circle),
+                        onPressed: () {},
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.save_alt),
+                        onPressed: () {},
+                      )
+                    ],
+                  )
+                ],
+              ),
+              
+          ]),
       ),
     );
   }
