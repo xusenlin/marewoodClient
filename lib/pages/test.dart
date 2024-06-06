@@ -1,6 +1,6 @@
 import '../../components/webView.dart';
 import 'package:flutter/material.dart';
-import 'home/tabContent/task.dart';
+
 
 
 class Test extends StatelessWidget {
@@ -8,10 +8,10 @@ class Test extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final User user = ModalRoute.of(context)!.settings.arguments as User;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text('Test Page ${user.name}'),
+        title: Text('Test Page '),
       ),
       body:WebView(),
       // Center(
