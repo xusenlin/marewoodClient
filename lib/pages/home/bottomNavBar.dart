@@ -29,7 +29,7 @@ class BottomNavBar extends StatelessWidget {
         ),
       ],
       currentIndex: selectedIndex,
-      selectedItemColor: Colors.indigoAccent,
+      selectedItemColor: Colors.deepPurple,
       onTap: onItemTapped,
     );
   }

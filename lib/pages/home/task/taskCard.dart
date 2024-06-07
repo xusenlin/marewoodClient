@@ -1,29 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marewood_client/models/task.dart';
-
-class Status extends StatelessWidget{
-  const Status({super.key, required this.status});
-
-  final int status;
-
-  @override
-  Widget build(BuildContext context) {
-    switch (status) {
-      case 0:
-        return const Icon(Icons.panorama_fish_eye_outlined,color: Colors.grey);
-      case 1:
-        return const SizedBox(width: 18.0, height: 18.0, child: CircularProgressIndicator(strokeWidth: 2),);
-      case 2:
-        return const Icon(Icons.remove_circle_outline,color: Colors.redAccent);
-      case 3:
-        return const Icon(Icons.check_circle_outline,color: Colors.green);
-      default:
-        return const Icon(Icons.panorama_fish_eye_outlined,color: Colors.grey);
-    }
-  }
-
-}
-
+import 'package:marewood_client/pages/home/task/status.dart';
 
 
 class TaskCard extends StatelessWidget{
@@ -36,6 +13,7 @@ class TaskCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 9,horizontal:
       18),
       child: Padding(
@@ -91,17 +69,42 @@ class TaskCard extends StatelessWidget{
                   Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.play_circle),
-                        onPressed: () {},
+                        tooltip: "more action",
+                        icon: const Icon(Icons.more_horiz,size: 20),
+                        onPressed: () {
+
+                        },
                       ),
                       IconButton(
-                        icon: const Icon(Icons.save_alt),
-                        onPressed: () {},
+                        tooltip: "terminal info",
+                        icon: const Icon(Icons.terminal_outlined,size: 20),
+                        onPressed: () {
+                          showModalBottomSheet(
+                            showDragHandle: true,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return SingleChildScrollView(child: Container(
+                                padding: const EdgeInsets.all(10.0),
+                                color: Colors.black87,
+                                child: Center(
+                                  child: Text(task.terminalInfo,style: const TextStyle(color: Colors.white,fontSize: 12)),
+                                ),
+                              ));
+                            },
+                          );
+                        },
                       ),
                       IconButton(
-                        icon: const Icon(Icons.more_horiz),
+                        tooltip: "switch branches",
+                        icon: const Icon(Icons.share,size: 20),
                         onPressed: () {},
-                      )
+                      ),
+
+                      IconButton(
+                        tooltip: "run task",
+                        icon: const Icon(Icons.play_circle,size: 20),
+                        onPressed: () {},
+                      ),
                     ],
                   )
                 ],

@@ -2,7 +2,7 @@ import 'dart:core';
 
 import './tabContent/users.dart';
 import './tabContent/repositories.dart';
-import './tabContent/task.dart';
+import 'task/task.dart';
 import '../../routes.dart';
 import 'package:flutter/material.dart';
 
