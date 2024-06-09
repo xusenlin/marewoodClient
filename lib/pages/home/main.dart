@@ -1,9 +1,9 @@
 import 'dart:core';
 
-import './tabContent/users.dart';
-import './tabContent/repositories.dart';
-import 'task/task.dart';
 import '../../routes.dart';
+import 'users/main.dart';
+import 'repo/main.dart';
+import 'task/main.dart';
 import 'package:flutter/material.dart';
 
 import './bottomNavBar.dart';
@@ -32,6 +32,13 @@ class _HomePageState extends State<Home> {
       _selectedIndex = index;
     });
   }
+
+  @override
+  void initState() {
+    super.initState();
+    // await UserStore.removeUser();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

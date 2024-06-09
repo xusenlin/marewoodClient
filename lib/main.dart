@@ -4,6 +4,7 @@ import './routes.dart';
 
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const App());
 }
 
@@ -14,7 +15,10 @@ class App extends StatelessWidget {
     return MaterialApp(
       title: appName,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurpleAccent),
+        // bottomSheetTheme: const BottomSheetThemeData(
+        //     backgroundColor: Colors.white
+        // ),
         useMaterial3: true,
       ),
       initialRoute: Routes.home,

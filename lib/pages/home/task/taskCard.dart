@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:marewood_client/models/task.dart';
 import 'package:marewood_client/pages/home/task/status.dart';
+import 'package:marewood_client/pages/home/task/switchBranch.dart';
+
+import '../../../routes.dart';
 
 
 class TaskCard extends StatelessWidget{
@@ -38,19 +41,20 @@ class TaskCard extends StatelessWidget{
               ),
               const Divider(color: Color.fromARGB(255, 229, 231, 235)),
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10),
+                padding: const EdgeInsets.symmetric(vertical: 14),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Branch:${task.branch}',style: bodyText),
+                    Text('Branch：',style: bodyText),
+                    Text(task.branch,style: bodyText),
                   ],
                 ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Hash:${task.commitHash}',style: bodyText),
-                  Text('RunTotal:${task.runTotal}',style: bodyText),
+                  Text('Hash：${task.commitHash}',style: bodyText),
+                  Text('RunTotal：${task.runTotal}',style: bodyText),
                 ],
               ),
               Row(
@@ -72,7 +76,7 @@ class TaskCard extends StatelessWidget{
                         tooltip: "more action",
                         icon: const Icon(Icons.more_horiz,size: 20),
                         onPressed: () {
-
+                          Navigator.pushNamed(context, Routes.login);
                         },
                       ),
                       IconButton(
@@ -81,13 +85,14 @@ class TaskCard extends StatelessWidget{
                         onPressed: () {
                           showModalBottomSheet(
                             showDragHandle: true,
+                            backgroundColor: Colors.white,
                             context: context,
                             builder: (BuildContext context) {
                               return SingleChildScrollView(child: Container(
                                 padding: const EdgeInsets.all(10.0),
-                                color: Colors.black87,
+                                color: Colors.white,
                                 child: Center(
-                                  child: Text(task.terminalInfo,style: const TextStyle(color: Colors.white,fontSize: 12)),
+                                  child: Text(task.terminalInfo,style: const TextStyle(color: Colors.black87,fontSize: 12)),
                                 ),
                               ));
                             },
@@ -97,7 +102,9 @@ class TaskCard extends StatelessWidget{
                       IconButton(
                         tooltip: "switch branches",
                         icon: const Icon(Icons.share,size: 20),
-                        onPressed: () {},
+                        onPressed: () async {
+                          await switchBranch(context);
+                        },
                       ),
 
                       IconButton(
