@@ -55,8 +55,8 @@ class LeftDrawer extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text("Admin"),
-                          const SizedBox(height: 60),
+                          // const Text("Admin",style: TextStyle(color: Colors.deepPurple)),
+                          // const SizedBox(height: 60),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceAround,
                             children: [
@@ -64,17 +64,52 @@ class LeftDrawer extends StatelessWidget {
                                   onPressed: (){
                                     Navigator.pushNamed(context, Routes.stores);
                                   },
-                                  icon: const Icon(Icons.store_mall_directory,size: 30)
+                                  tooltip: "local stores",
+                                  icon: const Icon(Icons.store_mall_directory,size: 30,color: Colors.grey)
                               ),
                               IconButton(
                                   onPressed: (){
                                     Navigator.pushNamed(context, Routes.stores);
                                   },
-                                  icon: const Icon(Icons.login_outlined,size: 30)
+                                  tooltip: "copy github url",
+                                  icon: const Icon(Icons.copy_all,size: 30,color: Colors.grey)
+                              ),
+                              IconButton(
+                                  onPressed: (){
+                                    Navigator.pushNamed(context, Routes.stores);
+                                  },
+                                  tooltip: "login out",
+                                  icon: const Icon(Icons.login_outlined,size: 30,color: Colors.grey)
                               ),
                             ],
                           ),
-
+                          const SizedBox(height: 40),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IconButton(
+                                  onPressed: (){
+                                    Navigator.pushNamed(context, Routes.stores);
+                                  },
+                                  tooltip: "local stores",
+                                  icon: const Icon(Icons.store_mall_directory,size: 30,color: Colors.grey)
+                              ),
+                              IconButton(
+                                  onPressed: (){
+                                    Navigator.pushNamed(context, Routes.stores);
+                                  },
+                                  tooltip: "copy github url",
+                                  icon: const Icon(Icons.copy_all,size: 30,color: Colors.grey)
+                              ),
+                              IconButton(
+                                  onPressed: (){
+                                    Navigator.pushNamed(context, Routes.stores);
+                                  },
+                                  tooltip: "login out",
+                                  icon: const Icon(Icons.login_outlined,size: 30,color: Colors.grey)
+                              ),
+                            ],
+                          ),
                         ],
                       ),
                         // child: Center(
