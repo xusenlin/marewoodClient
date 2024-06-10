@@ -59,6 +59,17 @@ class _HomePageState extends State<Home> {
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Add your onPressed code here!
+          print('Floating Action Button Pressed!');
+        },
+        tooltip: 'Increment',
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(40.0),
+        ),
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }

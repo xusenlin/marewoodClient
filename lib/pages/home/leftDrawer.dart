@@ -65,21 +65,21 @@ class LeftDrawer extends StatelessWidget {
                                     Navigator.pushNamed(context, Routes.stores);
                                   },
                                   tooltip: "local stores",
-                                  icon: const Icon(Icons.store_mall_directory,size: 30,color: Colors.grey)
+                                  icon: const Icon(Icons.ac_unit_outlined,size: 24,color: Colors.deepPurple)
                               ),
                               IconButton(
                                   onPressed: (){
                                     Navigator.pushNamed(context, Routes.stores);
                                   },
                                   tooltip: "copy github url",
-                                  icon: const Icon(Icons.copy_all,size: 30,color: Colors.grey)
+                                  icon: const Icon(Icons.back_hand,size: 24,color: Colors.deepPurple)
                               ),
                               IconButton(
                                   onPressed: (){
                                     Navigator.pushNamed(context, Routes.stores);
                                   },
                                   tooltip: "login out",
-                                  icon: const Icon(Icons.login_outlined,size: 30,color: Colors.grey)
+                                  icon: const Icon(Icons.palette,size: 24,color: Colors.deepPurple)
                               ),
                             ],
                           ),
@@ -92,21 +92,21 @@ class LeftDrawer extends StatelessWidget {
                                     Navigator.pushNamed(context, Routes.stores);
                                   },
                                   tooltip: "local stores",
-                                  icon: const Icon(Icons.store_mall_directory,size: 30,color: Colors.grey)
+                                  icon: const Icon(Icons.store_mall_directory,size: 24,color: Colors.deepPurple)
                               ),
                               IconButton(
                                   onPressed: (){
                                     Navigator.pushNamed(context, Routes.stores);
                                   },
                                   tooltip: "copy github url",
-                                  icon: const Icon(Icons.copy_all,size: 30,color: Colors.grey)
+                                  icon: const Icon(Icons.copy_all,size: 24,color: Colors.deepPurple)
                               ),
                               IconButton(
                                   onPressed: (){
                                     Navigator.pushNamed(context, Routes.stores);
                                   },
                                   tooltip: "login out",
-                                  icon: const Icon(Icons.login_outlined,size: 30,color: Colors.grey)
+                                  icon: const Icon(Icons.login_outlined,size: 24,color: Colors.deepPurple)
                               ),
                             ],
                           ),
