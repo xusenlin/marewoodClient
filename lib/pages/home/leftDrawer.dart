@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:marewood_client/config/app.dart';
+import 'package:marewood_client/routes.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -7,6 +8,7 @@ class LeftDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const greyStyle = TextStyle(fontSize: 13,color: Colors.grey);
+
     return Drawer(
         child: SafeArea(
             child: Padding(
@@ -50,14 +52,39 @@ class LeftDrawer extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                        child: Center(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                // Navigator.pushNamed(context, Routes.test);
-                              },
-                              child: const Text('Logout'),
-                            )
-                        )
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Text("Admin"),
+                          const SizedBox(height: 60),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              IconButton(
+                                  onPressed: (){
+                                    Navigator.pushNamed(context, Routes.stores);
+                                  },
+                                  icon: const Icon(Icons.store_mall_directory,size: 30)
+                              ),
+                              IconButton(
+                                  onPressed: (){
+                                    Navigator.pushNamed(context, Routes.stores);
+                                  },
+                                  icon: const Icon(Icons.login_outlined,size: 30)
+                              ),
+                            ],
+                          ),
+
+                        ],
+                      ),
+                        // child: Center(
+                        //     child: ElevatedButton(
+                        //       onPressed: () {
+                        //         // Navigator.pushNamed(context, Routes.test);
+                        //       },
+                        //       child: const Text('Logout'),
+                        //     )
+                        // )
                     ),
                   ],
                 )

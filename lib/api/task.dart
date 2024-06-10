@@ -17,7 +17,6 @@ Future<PaginationData> fetchTasksPagination(int page) async {
   // if ( response.statusCode!= 200){
   //   throw Exception('响应错误');
   // }
-  print(page);
 
   final String responseJson = await rootBundle.loadString('assets/mock/task.json');
   var resp = Response.fromJson(jsonDecode(responseJson));
@@ -25,7 +24,7 @@ Future<PaginationData> fetchTasksPagination(int page) async {
   if ( !resp.status ){
     throw Exception('响应数据出错');
   }
-  await Future.delayed(const Duration(seconds: 2));
+  // await Future.delayed(const Duration(seconds: 2));
 
   var p = PaginationData.fromJson(resp.data);
 
