@@ -74,7 +74,7 @@ class TaskCard extends StatelessWidget{
                     children: [
                       IconButton(
                         tooltip: "more action",
-                        icon: const Icon(Icons.more_horiz,size: 20),
+                        icon: const Icon(Icons.more_horiz,size: 20,color: Colors.grey),
                         onPressed: () {
                           Navigator.pushNamed(context, Routes.login);
                         },

@@ -13,6 +13,9 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final primaryColor = Theme.of(context).primaryColor;
+
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
@@ -29,7 +32,7 @@ class BottomNavBar extends StatelessWidget {
         ),
       ],
       currentIndex: selectedIndex,
-      selectedItemColor: Colors.deepPurple,
+      selectedItemColor: primaryColor,
       onTap: onItemTapped,
     );
   }
