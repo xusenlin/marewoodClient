@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:marewood_client/config/app.dart';
+import 'package:marewood_client/pages/home/drawer/top.dart';
 import 'package:marewood_client/routes.dart';
-
-import '../../components/arcClipper.dart';
+import 'package:marewood_client/stores/user.dart';
+import 'package:provider/provider.dart';
+import '../../../stores/userProvider.dart';
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({super.key});
@@ -11,93 +12,14 @@ class LeftDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     const greyStyle = TextStyle(fontSize: 13, color: Colors.grey);
     final primaryColor = Theme.of(context).primaryColor;
+    var userProvider = Provider.of<UserProvider>(context,listen: false);
 
     return Drawer(
         width: 300,
         backgroundColor: Colors.white,
         child: Column(
           children: [
-            Stack(
-              children: [
-                Container(
-                  height: 230,
-                  decoration: const BoxDecoration(
-                    image: DecorationImage(
-                      // opacity: 0.6,
-                      alignment: Alignment.bottomRight,
-                      image: AssetImage("assets/img/bg.png"), // 替换为实际的图片URL
-                      fit: BoxFit.fitHeight,
-                    ),
-                  ),
-                ),
-                Container(
-                  height: 200,
-                  padding: const EdgeInsets.all(18.0),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.2),
-                  ),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 26,
-                        child: Image.asset("assets/img/logo.png", width: 30),
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'Admin',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                    right: 18,
-                    bottom: 0,
-                    child: Container(
-                      width: 300 - 18*2,
-                      height: 80,
-                      padding: const EdgeInsets.all(10.0),
-                      decoration: BoxDecoration(
-                        color: primaryColor,
-                        borderRadius: const BorderRadius.all(Radius.circular(10))
-                      ),
-                      child:  Column(
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text("$appName $appVersion",
-                            style:
-                            TextStyle(color: Colors.white, fontSize: 12)),
-                        Text("https://github.com/xusenlin/marewood",
-                            style: greyStyle),
-                      ]),
-                    ),
-                    // Column(
-                    // crossAxisAlignment: CrossAxisAlignment.end,
-                    // children: [
-                    //   Text("$appName $appVersion",
-                    //       style:
-                    //       TextStyle(color: Colors.white, fontSize: 12)),
-                    //   Text("https://github.com/xusenlin/marewood",
-                    //       style: greyStyle),
-                    // ])
-                ),
-                Positioned(
-                    left: 0,
-                    bottom: 0,
-                    child: ClipPath(
-                      clipper: ArcClipper(),
-                      child: Container(
-                        width: 300,
-                        height: 30,
-                        color: Colors.white,
-                      ),
-                    ))
-              ],
-            ),
+            const DrawerTop(),
             const Padding(
               padding: EdgeInsets.symmetric(vertical: 20),
               child: Column(
@@ -136,9 +58,9 @@ class LeftDrawer extends StatelessWidget {
                         onPressed: () {
                           // changePrimaryColor(Colors.red);
                         },
-                        tooltip: "Change to Red",
+                        tooltip: "Change to Purple",
                         icon: const Icon(Icons.panorama_fish_eye_outlined,
-                            size: 24, color: Colors.red),
+                            size: 24, color: Colors.deepPurple),
                       ),
                       IconButton(
                         onPressed: () {
@@ -177,8 +99,10 @@ class LeftDrawer extends StatelessWidget {
                           icon: Icon(Icons.copy_all,
                               size: 24, color: primaryColor)),
                       IconButton(
-                          onPressed: () {
-                            Navigator.pushNamed(context, Routes.stores);
+                          onPressed: () async {
+                            userProvider.removeUser();
+                            Navigator.of(context).pop();
+                            await UserStore.removeUser();
                           },
                           tooltip: "login out",
                           icon: Icon(Icons.login_outlined,

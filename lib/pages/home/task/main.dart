@@ -13,9 +13,11 @@ class TabTask extends StatefulWidget {
 
 class _TaskList extends  State<TabTask>{
   List<Task> tasks = [];
-  int currentPage = 0;
+  int currentPage = 1;
   int totalPages = 1;
   bool isLoading = false;
+  String name = "";
+  String tags = "";
 
 
   @override
@@ -29,16 +31,21 @@ class _TaskList extends  State<TabTask>{
       isLoading = true;
     });
     try{
-      var pagination = await fetchTasksPagination(currentPage);
+      var pagination = await fetchTasksPagination(
+        pageNum: currentPage,
+        name: name,
+        tags: tags,
+      );
       setState(() {
         tasks = pagination.list.map((item) => Task.fromJson(item)).toList();
         totalPages = pagination.totalPage;
         isLoading = false;
       });
+
     }catch(e){
       setState(() {
         tasks = [];
-        totalPages = 9;
+        totalPages = 1;
         isLoading = false;
       });
     }
@@ -72,8 +79,8 @@ class _TaskList extends  State<TabTask>{
               child: Pagination(
                 currentPage: currentPage,
                 totalPages: totalPages,
-                onPreviousPage: currentPage > 0 ? _previousPage : () {},
-                onNextPage: currentPage < totalPages - 1 ? _nextPage : () {},
+                onPreviousPage: _previousPage,
+                onNextPage: _nextPage,
               ),
             ),
           );

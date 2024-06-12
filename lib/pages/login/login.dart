@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:marewood_client/stores/system.dart';
+import 'package:provider/provider.dart';
 import '../../api/login.dart';
 import '../../config/app.dart';
 import '../../stores/user.dart';
+import '../../stores/userProvider.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -18,6 +20,9 @@ class Login extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    var userProvider = Provider.of<UserProvider>(context,listen: false);
+
     return FutureBuilder<Map<String, String>>(
         future: _loadLocalInfo(),
         builder: (context, snapshot) {
@@ -98,8 +103,9 @@ class Login extends StatelessWidget {
                           await SystemStore.setAddress(address);
                           var user = await fetchLoginUser(username, password);
                           await UserStore.setUser(user);
-
                           if (!context.mounted) return;
+
+                          userProvider.setUser(user);
                           Navigator.pop(context);
                         } catch (e) {
                           if (!context.mounted) return;

@@ -1,32 +1,19 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
-import 'package:http/http.dart' as http;
-
-
+import 'package:marewood_client/utils/request.dart';
 import '../models/pagination.dart';
-import '../models/response.dart';
-import '../models/task.dart';
 
 
 
 
+Future<PaginationData> fetchTasksPagination({ int pageNum = 1,int pageSize = 10,String ? name,String ? tags}) async {
+  String endpoint = "/v1/tasks?pageNum=$pageNum&pageSize=$pageSize&name=$name&tags=$tags";
+  final response = await sendRequest(endpoint: endpoint, method: HttpMethod.get);
 
-Future<PaginationData> fetchTasksPagination(int page) async {
-  // final response = await http.get(Uri.parse('http://10.10.59.42:3000/hello'));
-  // if ( response.statusCode!= 200){
-  //   throw Exception('响应错误');
-  // }
-
-  final String responseJson = await rootBundle.loadString('assets/mock/task.json');
-  var resp = Response.fromJson(jsonDecode(responseJson));
-  // final data = await json.decode(responseJson) as Response<PaginationData<Task>>;
-  if ( !resp.status ){
-    throw Exception('响应数据出错');
+  // final String responseJson = await rootBundle.loadString('assets/mock/task.json');
+  // var resp = Response.fromJson(jsonDecode(responseJson));
+  if ( !response.status ){
+    throw Exception(response.msg);
   }
-  // await Future.delayed(const Duration(seconds: 2));
 
-  var p = PaginationData.fromJson(resp.data);
-
+  var p = PaginationData.fromJson(response.data);
   return p;
 }

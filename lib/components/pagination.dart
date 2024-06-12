@@ -21,12 +21,12 @@ class Pagination extends StatelessWidget {
       children: [
         IconButton(
           icon: const Icon(Icons.arrow_back),
-          onPressed: currentPage > 0 ? onPreviousPage : null,
+          onPressed: currentPage != 1  ? onPreviousPage : null,
         ),
-        Text('${currentPage + 1} / $totalPages'),
+        Text('$currentPage / $totalPages'),
         IconButton(
           icon: const Icon(Icons.arrow_forward),
-          onPressed: currentPage < totalPages - 1 ? onNextPage : null,
+          onPressed: currentPage != totalPages  ? onNextPage : null,
         ),
       ],
     );

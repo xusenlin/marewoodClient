@@ -54,6 +54,9 @@ Future<Response> sendRequest({
   if (response.statusCode != 200) {
     throw Exception('Error: ${response.statusCode}, ${response.body}');
   }
-  var decodedResponse = jsonDecode(response.body);
+  Utf8Decoder utf8decoder = const Utf8Decoder();
+  String responseString = utf8decoder.convert(response.bodyBytes);
+
+  var decodedResponse = jsonDecode(responseString);
   return Response.fromJson(decodedResponse);
 }
