@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marewood_client/stores/themeProvider.dart';
 import 'package:marewood_client/stores/userProvider.dart';
 import 'package:provider/provider.dart';
 import './config/app.dart';
@@ -18,27 +19,38 @@ class App extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (context) => UserProvider()),
+        ChangeNotifierProvider(create: (context) => ThemeProvider()),
       ],
-      child: MaterialApp(
-        title: appName,
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
-          // scaffoldBackgroundColor:const Color.fromARGB(255, 250, 250, 250),
-          // appBarTheme:const AppBarTheme(
-          //   backgroundColor: Colors.white,
-          // ),
-          // // bottomSheetTheme: const BottomSheetThemeData(
-          // //     backgroundColor: Colors.white
-          // // ),
-          //   primaryColor: Colors.black,
-          // useMaterial3: true,
-          // bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          //   backgroundColor: Colors.white,
-          // )
-        ),
-        initialRoute: Routes.home,
-        routes: Routes.getRoutes(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            title: appName,
+            theme: themeProvider.themeData,
+            initialRoute: Routes.home,
+            routes: Routes.getRoutes(),
+          );
+        },
       ),
+      // child: MaterialApp(
+      //   title: appName,
+      //   theme: ThemeData(
+      //     colorScheme: ColorScheme.fromSeed(seedColor: Colors.redAccent),
+      //     // scaffoldBackgroundColor:const Color.fromARGB(255, 250, 250, 250),
+      //     // appBarTheme:const AppBarTheme(
+      //     //   backgroundColor: Colors.white,
+      //     // ),
+      //     // // bottomSheetTheme: const BottomSheetThemeData(
+      //     // //     backgroundColor: Colors.white
+      //     // // ),
+      //     //   primaryColor: Colors.black,
+      //     // useMaterial3: true,
+      //     // bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      //     //   backgroundColor: Colors.white,
+      //     // )
+      //   ),
+      //   initialRoute: Routes.home,
+      //   routes: Routes.getRoutes(),
+      // ),
     );
   }
 }

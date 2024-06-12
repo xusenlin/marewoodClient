@@ -1,15 +1,11 @@
 import 'dart:core';
-
 import 'package:marewood_client/stores/userProvider.dart';
 import 'package:provider/provider.dart';
-import 'package:marewood_client/stores/user.dart';
-
 import '../../routes.dart';
 import 'users/main.dart';
 import 'repo/main.dart';
 import 'task/main.dart';
 import 'package:flutter/material.dart';
-
 import './bottomNavBar.dart';
 import './drawer/main.dart';
 
@@ -44,11 +40,6 @@ class _HomePageState extends State<Home> {
 
     var userProvider = Provider.of<UserProvider>(context);
     var user = userProvider.user;
-
-    UserStore.getUser().then((u){
-      if(u==null)return;
-      userProvider.setUser(u);
-    });
 
     return Scaffold(
       appBar: AppBar(
