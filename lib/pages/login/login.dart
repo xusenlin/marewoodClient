@@ -102,9 +102,7 @@ class Login extends StatelessWidget {
                           }
                           await SystemStore.setAddress(address);
                           var user = await fetchLoginUser(username, password);
-                          await UserStore.setUser(user);
                           if (!context.mounted) return;
-
                           userProvider.setUser(user);
                           Navigator.pop(context);
                         } catch (e) {

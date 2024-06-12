@@ -1,17 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:marewood_client/stores/system.dart';
 
 class ThemeProvider extends ChangeNotifier {
-  ThemeData _themeData;
+  Color _themeColor = Colors.blue;
 
-  ThemeProvider() : _themeData = ThemeData(
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-    useMaterial3: true,
-  );
+  Color get themeColor => _themeColor;
 
-  ThemeData get themeData => _themeData;
+  ThemeProvider() {
+    _initializeTheme();
+  }
 
-  void setTheme(ThemeData themeData) {
-    _themeData = themeData;
+  Future<void> _initializeTheme() async {
+    Color? c = await SystemStore.getThemeColor();
+    if (c != null) {
+      _themeColor = c;
+    }else{
+      _themeColor = Colors.blue;
+    }
+    notifyListeners();
+  }
+
+  void setTheme(Color themeColor) async {
+    _themeColor = themeColor;
+    await SystemStore.setThemeColor(themeColor);
     notifyListeners();
   }
 }

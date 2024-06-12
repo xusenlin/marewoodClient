@@ -25,7 +25,9 @@ class App extends StatelessWidget {
         builder: (context, themeProvider, child) {
           return MaterialApp(
             title: appName,
-            theme: themeProvider.themeData,
+            theme: ThemeData(
+              colorScheme: ColorScheme.fromSeed(seedColor:themeProvider.themeColor)
+            ),
             initialRoute: Routes.home,
             routes: Routes.getRoutes(),
           );

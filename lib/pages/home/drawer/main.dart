@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:marewood_client/pages/home/drawer/top.dart';
 import 'package:marewood_client/routes.dart';
-import 'package:marewood_client/stores/user.dart';
 import 'package:provider/provider.dart';
+import '../../../stores/themeProvider.dart';
 import '../../../stores/userProvider.dart';
 
 class LeftDrawer extends StatelessWidget {
@@ -11,8 +11,9 @@ class LeftDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const greyStyle = TextStyle(fontSize: 13, color: Colors.grey);
-    final primaryColor = Theme.of(context).primaryColor;
     var userProvider = Provider.of<UserProvider>(context,listen: false);
+    var themeProvider = Provider.of<ThemeProvider>(context);
+    final primaryColor = themeProvider.themeColor;
 
     return Drawer(
         width: 300,
@@ -56,27 +57,27 @@ class LeftDrawer extends StatelessWidget {
                     children: [
                       IconButton(
                         onPressed: () {
-                          // changePrimaryColor(Colors.red);
+                          themeProvider.setTheme(Colors.blue);
                         },
-                        tooltip: "Change to Purple",
+                        tooltip: "Change to blue",
                         icon: const Icon(Icons.panorama_fish_eye_outlined,
-                            size: 24, color: Colors.deepPurple),
+                            size: 24, color: Colors.blue),
                       ),
                       IconButton(
                         onPressed: () {
-                          // changePrimaryColor(Colors.green);
+                          themeProvider.setTheme( Colors.green);
                         },
-                        tooltip: "Change to Green",
+                        tooltip: "Change to green",
                         icon: const Icon(Icons.panorama_fish_eye_outlined,
                             size: 24, color: Colors.green),
                       ),
                       IconButton(
                         onPressed: () {
-                          // changePrimaryColor(Colors.blue);
+                          themeProvider.setTheme(Colors.deepPurple);
                         },
-                        tooltip: "Change to Blue",
+                        tooltip: "Change to deepPurple",
                         icon: const Icon(Icons.panorama_fish_eye_outlined,
-                            size: 24, color: Colors.blue),
+                            size: 24, color: Colors.deepPurple),
                       ),
                     ],
                   ),
@@ -102,7 +103,6 @@ class LeftDrawer extends StatelessWidget {
                           onPressed: () async {
                             userProvider.removeUser();
                             Navigator.of(context).pop();
-                            await UserStore.removeUser();
                           },
                           tooltip: "login out",
                           icon: Icon(Icons.login_outlined,
@@ -111,14 +111,6 @@ class LeftDrawer extends StatelessWidget {
                   ),
                 ],
               ),
-              // child: Center(
-              //     child: ElevatedButton(
-              //       onPressed: () {
-              //         // Navigator.pushNamed(context, Routes.test);
-              //       },
-              //       child: const Text('Logout'),
-              //     )
-              // )
             ),
           ],
         ));

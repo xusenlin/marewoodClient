@@ -19,13 +19,15 @@ class UserProvider extends ChangeNotifier {
     }
   }
 
-  void setUser(User user) {
+  void setUser(User user) async {
     _user = user;
+    await UserStore.setUser(user);
     notifyListeners(); // 通知依赖此数据模型的组件进行更新
   }
 
-  void removeUser() {
+  void removeUser() async {
     _user = null;
+    await UserStore.removeUser();
     notifyListeners(); // 通知依赖此数据模型的组件进行更新
   }
 }
