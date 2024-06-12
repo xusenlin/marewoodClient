@@ -5,7 +5,7 @@ class SystemStore {
   static const keyPrefix = 'system';
 
   static const addressKey = "$keyPrefix.address";
-  static const themeColorKey = "$keyPrefix.themeKey";
+  static const themeColorKey = "$keyPrefix.theme";
 
   static Future<void> setAddress(String address) async {
     final prefs = await SharedPreferences.getInstance();

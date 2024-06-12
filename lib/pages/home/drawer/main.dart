@@ -60,23 +60,33 @@ class LeftDrawer extends StatelessWidget {
                           themeProvider.setTheme(Colors.blue);
                         },
                         tooltip: "Change to blue",
-                        icon: const Icon(Icons.panorama_fish_eye_outlined,
+                        icon: Icon(
+                            themeProvider.themeColor == Colors.blue
+                                ? Icons.radio_button_checked :
+                            Icons.radio_button_unchecked,
                             size: 24, color: Colors.blue),
                       ),
                       IconButton(
                         onPressed: () {
-                          themeProvider.setTheme( Colors.green);
+                          themeProvider.setTheme(Colors.green);
                         },
                         tooltip: "Change to green",
-                        icon: const Icon(Icons.panorama_fish_eye_outlined,
-                            size: 24, color: Colors.green),
+                        icon: Icon(
+                            themeProvider.themeColor == Colors.green
+                                ? Icons.radio_button_checked :
+                            Icons.radio_button_unchecked,
+                            size: 24,
+                            color: Colors.green),
                       ),
                       IconButton(
                         onPressed: () {
                           themeProvider.setTheme(Colors.deepPurple);
                         },
                         tooltip: "Change to deepPurple",
-                        icon: const Icon(Icons.panorama_fish_eye_outlined,
+                        icon: Icon(
+                            themeProvider.themeColor == Colors.deepPurple
+                            ? Icons.radio_button_checked :
+                        Icons.radio_button_unchecked,
                             size: 24, color: Colors.deepPurple),
                       ),
                     ],
