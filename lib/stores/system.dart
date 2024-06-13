@@ -22,15 +22,15 @@ class SystemStore {
 
   static Future<void> setThemeColor(Color color) async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(themeColorKey,color.value.toRadixString(16));
+    await prefs.setInt(themeColorKey,color.value);
   }
   static Future<Color?> getThemeColor() async {
     final prefs = await SharedPreferences.getInstance();
-    var colorString = prefs.getString(themeColorKey);
-    if(colorString==null){
+    var colorValue = prefs.getInt(themeColorKey);
+    if(colorValue==null){
       return null;
     }
-    return Color(int.parse(colorString, radix: 16));
+    return Color(colorValue);
   }
 
   static Future<void> removeThemeColor() async {

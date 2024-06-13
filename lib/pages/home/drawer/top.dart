@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:marewood_client/models/sysInfo.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/arcClipper.dart';
@@ -6,7 +7,9 @@ import '../../../config/app.dart';
 import '../../../stores/userProvider.dart';
 
 class DrawerTop extends StatelessWidget{
-  const DrawerTop({super.key});
+  const DrawerTop({ required this.sysInfo,super.key});
+
+  final SysInfo sysInfo;
 
   @override
   Widget build(BuildContext context) {
@@ -64,13 +67,13 @@ class DrawerTop extends StatelessWidget{
                 color: primaryColor,
                 borderRadius: const BorderRadius.all(Radius.circular(10))
             ),
-            child:  const Column(
+            child:  Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  Text("$appName $appVersion",
+                  Text("$appName  v${sysInfo.version}",
                       style:
-                      TextStyle(color: Colors.white, fontSize: 12)),
-                  Text("https://github.com/xusenlin/marewood",
+                      const TextStyle(color: Colors.white, fontSize: 12)),
+                      const Text("https://github.com/xusenlin/marewood",
                       style: greyStyle),
                 ]),
           ),

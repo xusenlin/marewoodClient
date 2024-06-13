@@ -52,7 +52,7 @@ class _HomePageState extends State<Home> {
                   child: const Text("Please log in"))
               )
               :  _tabContent[_selectedIndex]),
-      drawer: const LeftDrawer(),
+      drawer: const MainDrawer(),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
         onItemTapped: _onItemTapped,
