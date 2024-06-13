@@ -7,9 +7,10 @@ import '../../../routes.dart';
 
 
 class TaskCard extends StatelessWidget{
-  const TaskCard({super.key, required this.task});
+  const TaskCard({super.key, required this.task, required this.onChangeData});
 
   final Task task;
+  final VoidCallback onChangeData;
 
   final bodyText =  const TextStyle(color:  Colors.grey);
 
@@ -103,7 +104,16 @@ class TaskCard extends StatelessWidget{
                         tooltip: "switch branches",
                         icon: const Icon(Icons.share,size: 20),
                         onPressed: () async {
-                          await switchBranch(context);
+                          var index = await switchBranch(task,context);
+                          if(index==null)return;
+                          onChangeData();
+                          if(!context.mounted)return;
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                behavior: SnackBarBehavior.floating,
+                                content: Text("switch branch success")
+                            ),
+                          );
                         },
                       ),
 

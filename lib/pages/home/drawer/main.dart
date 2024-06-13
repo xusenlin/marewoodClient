@@ -42,13 +42,13 @@ class _DrawerState extends State<MainDrawer> {
       });
     }catch(e){
       if(!context.mounted)return;
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            behavior: SnackBarBehavior.floating,
-            content: Text(e.toString() )
-        ),
-      );
+      // Navigator.of(context).pop();
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   SnackBar(
+      //       behavior: SnackBarBehavior.floating,
+      //       content: Text(e.toString() )
+      //   ),
+      // );
     }
   }
 

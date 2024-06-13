@@ -85,7 +85,7 @@ class _TaskList extends  State<TabTask>{
             ),
           );
         }
-        return TaskCard(task: tasks[index]);
+        return TaskCard(task: tasks[index],onChangeData: fetchTasks,);
       },
     );
   }
