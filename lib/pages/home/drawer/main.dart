@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:marewood_client/models/sysInfo.dart';
@@ -63,7 +61,7 @@ class _DrawerState extends State<MainDrawer> {
         backgroundColor: Colors.white,
         child: Column(
           children: [
-            if(sysInfo!=null)DrawerTop(sysInfo: sysInfo!),
+            DrawerTop(sysInfo: sysInfo),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 20),
               child: Column(

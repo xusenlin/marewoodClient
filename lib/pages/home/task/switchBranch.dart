@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:marewood_client/models/task.dart';
 
 import '../../../api/repo.dart';
+import '../../../api/task.dart';
 
 Future<int?> switchBranch(Task task,BuildContext context) async {
   try{
@@ -28,7 +29,7 @@ Future<int?> switchBranch(Task task,BuildContext context) async {
         );
       });
     if (i==null)return null;
-    await updateRepositoryBranch(task.repositoryId,branch[i]);
+    await updateTaskBranch(task.id,branch[i]);
     return i;
   }catch(e){
     if(!context.mounted) return null;

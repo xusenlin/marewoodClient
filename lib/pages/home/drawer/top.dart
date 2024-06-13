@@ -6,20 +6,19 @@ import '../../../components/arcClipper.dart';
 import '../../../config/app.dart';
 import '../../../stores/userProvider.dart';
 
-class DrawerTop extends StatelessWidget{
-  const DrawerTop({ required this.sysInfo,super.key});
+class DrawerTop extends StatelessWidget {
+  const DrawerTop({this.sysInfo, super.key});
 
-  final SysInfo sysInfo;
+  final SysInfo? sysInfo;
 
   @override
   Widget build(BuildContext context) {
-
     const greyStyle = TextStyle(fontSize: 13, color: Colors.grey);
     final primaryColor = Theme.of(context).primaryColor;
     var userProvider = Provider.of<UserProvider>(context);
     var user = userProvider.user;
 
-    return  Stack(
+    return Stack(
       children: [
         Container(
           height: 230,
@@ -47,7 +46,7 @@ class DrawerTop extends StatelessWidget{
               ),
               const SizedBox(width: 10),
               Text(
-                user == null ? "Not logged in" :user.username,
+                user == null ? "Not logged in" : user.username,
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -60,22 +59,19 @@ class DrawerTop extends StatelessWidget{
           right: 18,
           bottom: 0,
           child: Container(
-            width: 300 - 18*2,
+            width: 300 - 18 * 2,
             height: 80,
             padding: const EdgeInsets.all(10.0),
             decoration: BoxDecoration(
                 color: primaryColor,
-                borderRadius: const BorderRadius.all(Radius.circular(10))
-            ),
-            child:  Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Text("$appName  v${sysInfo.version}",
-                      style:
-                      const TextStyle(color: Colors.white, fontSize: 12)),
-                      const Text("https://github.com/xusenlin/marewood",
-                      style: greyStyle),
-                ]),
+                borderRadius: const BorderRadius.all(Radius.circular(10))),
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+              Text("$appName  ${sysInfo == null ? '' : 'v${sysInfo?.version}'}",
+                  style: const TextStyle(color: Colors.white, fontSize: 12)),
+              const Text("https://github.com/xusenlin/marewood",
+                  style: greyStyle),
+            ]),
           ),
           // Column(
           // crossAxisAlignment: CrossAxisAlignment.end,
