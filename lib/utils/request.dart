@@ -23,8 +23,6 @@ Future<Response> sendRequest({
   if (address == null || !address.contains("http")) {
     throw Exception("baseUrl error");
   }
-
-
   var token = await UserStore.getToken();
   headers ??= {};
   if (token != null) {

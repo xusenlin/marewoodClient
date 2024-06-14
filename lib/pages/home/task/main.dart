@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../utils/sse.dart';
 import './taskCard.dart';
 import '../../../api/task.dart';
 import '../../../components/pagination.dart';
@@ -12,6 +13,9 @@ class TabTask extends StatefulWidget {
 }
 
 class TaskList extends  State<TabTask>{
+
+  late SseClient sseClient;
+
   List<Task> tasks = [];
   int currentPage = 1;
   int totalPages = 1;
@@ -24,6 +28,9 @@ class TaskList extends  State<TabTask>{
   void initState() {
     super.initState();
     fetchTasks();
+    Future.delayed(const Duration(seconds: 2), () {
+      if (mounted) {subscribeTaskEvent();}
+    });
   }
 
   void refresh(){
@@ -64,12 +71,33 @@ class TaskList extends  State<TabTask>{
       fetchTasks();
     });
   }
-
   void _nextPage() {
     setState(() {
       currentPage++;
       fetchTasks();
     });
+  }
+
+
+  void subscribeTaskEvent(){
+    sseClient = SseClient('/v1/event/task');
+    sseClient.stream.listen((data) {
+      // const eventTypeEditOk = "editOk"
+      // const eventTypeDestroyOk = "destroyOk"
+      // const eventTaskTypeRunOk = "runOk"
+      // const eventTaskTypeBuildOk = "buildOk"
+      // const eventTaskTypeBuildFail = "buildFail"
+      // if(data=="buildOk"){
+      //   fetchTasks();
+      // }
+      fetchTasks();
+    });
+  }
+
+  @override
+  void dispose() {
+    sseClient.close();
+    super.dispose();
   }
 
   @override

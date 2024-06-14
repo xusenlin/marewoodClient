@@ -2,28 +2,39 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class SseClient {
-  final String url;
-  final StreamController<Map<String, dynamic>> _controller =
-  StreamController<Map<String, dynamic>>();
+import '../stores/system.dart';
+import '../stores/user.dart';
 
-  SseClient(this.url) {
+class SseClient {
+  final String endpoint;
+  final StreamController<String> _controller =
+  StreamController<String>();
+
+  SseClient(this.endpoint) {
     _connect();
   }
 
-  Stream<Map<String, dynamic>> get stream => _controller.stream;
+  Stream<String> get stream => _controller.stream;
 
   void _connect() async {
-    final request = http.Request('GET', Uri.parse(url))
+
+    var address = await SystemStore.getAddress();
+    if (address == null || !address.contains("http")) {
+      throw Exception("baseUrl error");
+    }
+    var token = await UserStore.getToken();
+    var url = Uri.parse('$address$endpoint?token=$token');
+
+    final request = http.Request('GET',url)
       ..headers['Accept'] = 'text/event-stream';
 
     final response = await http.Client().send(request);
 
     response.stream.transform(utf8.decoder).listen((event) {
       for (String line in LineSplitter.split(event)) {
-        if (line.startsWith('data: ')) {
-          final data = json.decode(line.substring(6));
-          _controller.add(data);
+        print(line);
+        if (line.startsWith('event:')) {
+          _controller.add(line.substring(6));
         }
       }
     });
