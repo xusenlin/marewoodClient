@@ -39,8 +39,8 @@ Future<String> runTask(int id) async {
 }
 
 Future<String> downloadArchive(Task task,int type) async {
-  final directory = await getApplicationDocumentsDirectory();
-  final filePath = '${directory.path}/${task.commitHash}.zip';
+  final directory = await getDownloadsDirectory();
+  final filePath = '$directory/${task.commitHash}.${2 == type ?"zip":"tar"}';
   String endpoint = "/v1/task/archiver?id=${task.id.toString()}&type=${type.toString()}";
   final response = await request(endpoint: endpoint, method: HttpMethod.get);
   final file = File(filePath);

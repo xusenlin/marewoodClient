@@ -117,7 +117,7 @@ class TaskCard extends StatelessWidget{
                   // Text('Status:${task.status.toString()}'),
                 ],
               ),
-              const Divider(color: Color.fromARGB(255, 229, 231, 235)),
+              // const Divider(color: Color.fromARGB(255, 229, 231, 235)),
               Padding(
                 padding: const EdgeInsets.symmetric(vertical: 14),
                 child: Row(
@@ -131,10 +131,11 @@ class TaskCard extends StatelessWidget{
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Hash：${task.commitHash}',style: bodyText),
-                  Text('RunTotal：${task.runTotal}',style: bodyText),
+                  const Text('CommitHash：',style: bodyText),
+                  Text(task.commitHash,style: valText),
                 ],
               ),
+              const SizedBox(height: 10),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
