@@ -55,13 +55,19 @@ class TaskList extends  State<TabTask>{
         totalPages = pagination.totalPage;
         isLoading = false;
       });
-
     }catch(e){
       setState(() {
         tasks = [];
         totalPages = 1;
         isLoading = false;
       });
+      if(!mounted)return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(e.toString())
+        ),
+      );
     }
   }
 
@@ -90,7 +96,18 @@ class TaskList extends  State<TabTask>{
       // if(data=="buildOk"){
       //   fetchTasks();
       // }
-      fetchTasks();
+      setState(() {
+        currentPage=1;
+        fetchTasks();
+      });
+    },onError: (e){
+      if(!mounted)return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          behavior: SnackBarBehavior.floating,
+          content: Text(e.toString())
+        ),
+      );
     });
   }
 
@@ -102,26 +119,32 @@ class TaskList extends  State<TabTask>{
 
   @override
   Widget build(BuildContext context) {
-    return isLoading ?
-    const Center(child: CircularProgressIndicator()) :
-    ListView.builder(
-      itemCount: tasks.length+1,
-      itemBuilder: (context, index) {
-        if (index == tasks.length) {
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Center(
-              child: Pagination(
-                currentPage: currentPage,
-                totalPages: totalPages,
-                onPreviousPage: _previousPage,
-                onNextPage: _nextPage,
+    return Stack(children: [
+      ListView.builder(
+        itemCount: tasks.length+1,
+        itemBuilder: (context, index) {
+          if (index == tasks.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: Pagination(
+                  currentPage: currentPage,
+                  totalPages: totalPages,
+                  onPreviousPage: _previousPage,
+                  onNextPage: _nextPage,
+                ),
               ),
-            ),
-          );
-        }
-        return TaskCard(task: tasks[index],onChangeData: fetchTasks,);
-      },
-    );
+            );
+          }
+          return TaskCard(task: tasks[index],onChangeData: fetchTasks,);
+        },
+      ),
+      if (isLoading)
+        const Positioned.fill(
+          child: Center(
+            child: CircularProgressIndicator(),
+          ),
+        ),
+    ]);
   }
 }

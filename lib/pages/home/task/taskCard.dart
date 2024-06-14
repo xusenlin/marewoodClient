@@ -5,6 +5,7 @@ import 'package:marewood_client/pages/home/task/switchBranch.dart';
 import 'package:provider/provider.dart';
 
 import '../../../api/task.dart';
+import '../../../components/iconWithText.dart';
 import '../../../stores/themeProvider.dart';
 
 
@@ -121,7 +122,7 @@ class TaskCard extends StatelessWidget{
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(right: 4),
-                        child: Text('#${task.id.toString()}',style: const TextStyle(color:  Colors.grey)),
+                        child: Text('#${task.id.toString()}',style:  TextStyle(color:  themeProvider.themeColor)),
                       ),
                       if(task.private)const Icon(Icons.lock_outline,color: Colors.green,size: 16),
                     ],
@@ -132,6 +133,50 @@ class TaskCard extends StatelessWidget{
                         tooltip: "more action",
                         icon: const Icon(Icons.more_horiz,size: 20,color: Colors.grey),
                         onPressed: () {
+                          showModalBottomSheet(
+                            showDragHandle: true,
+                            backgroundColor: Colors.white,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                width: MediaQuery.of(context).size.width,
+                                height: 400,
+                                padding: const EdgeInsets.symmetric(horizontal: 20),
+                                color: Colors.white,
+                                child: Column(children: [
+                                  const Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      //按钮
+                                      IconWithText(icon: Icons.web_asset, text: 'Web Asset'),
+                                      IconWithText(icon: Icons.delete, text: 'Edit Task'),
+                                      IconWithText(icon: Icons.design_services, text: 'Delete Task'),
+                                      IconWithText(icon: Icons.arrow_downward, text: 'Download Tar'),
+                                      IconWithText(icon: Icons.save_alt, text: 'Download Zip'),
+                                    ]
+                                  ),
+                                  const Divider(color: Color.fromARGB(255, 229, 231, 235)),
+                                  Expanded(
+                                    child: ListView(
+                                        children: [
+                                          ListTile(
+                                            title: Text("BuildDir：${task.buildDir}"),
+                                          ),
+                                          ListTile(
+                                            title: Text("BuildCommand：${task.buildCommand}"),
+                                          ),
+                                          ListTile(
+                                            title: const Text("Description："),
+                                            subtitle: Text(task.description),
+                                          )
+                                        ],
+                                      ),
+                                  ),
+                                ]),
+                              );
+                            },
+                          );
                           // Navigator.pushNamed(context, Routes.login);
                         },
                       ),
@@ -145,11 +190,10 @@ class TaskCard extends StatelessWidget{
                             context: context,
                             builder: (BuildContext context) {
                               return SingleChildScrollView(child: Container(
-                                padding: const EdgeInsets.all(10.0),
+                                width: MediaQuery.of(context).size.width,
+                                padding: const EdgeInsets.all(16),
                                 color: Colors.white,
-                                child: Center(
-                                  child: Text(task.terminalInfo,style: const TextStyle(color: Colors.black87,fontSize: 12)),
-                                ),
+                                child:Text(task.terminalInfo,style: const TextStyle(color: Colors.black87,fontSize: 12)),
                               ));
                             },
                           );
