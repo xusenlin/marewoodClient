@@ -63,7 +63,28 @@ class TaskCard extends StatelessWidget{
 
   }
 
-
+  Future<void> download(BuildContext context,int type) async {
+    try{
+      var file = await downloadArchive(task,type);
+      if(!context.mounted)return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(file)
+        ),
+      );
+    }catch(e){
+      if(!context.mounted)return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(e.toString())
+        ),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -144,16 +165,23 @@ class TaskCard extends StatelessWidget{
                                 padding: const EdgeInsets.symmetric(horizontal: 20),
                                 color: Colors.white,
                                 child: Column(children: [
-                                  const Row(
+                                  Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      //按钮
-                                      IconWithText(icon: Icons.web_asset, text: 'Web Asset'),
-                                      IconWithText(icon: Icons.delete, text: 'Edit Task'),
-                                      IconWithText(icon: Icons.design_services, text: 'Delete Task'),
-                                      IconWithText(icon: Icons.arrow_downward, text: 'Download Tar'),
-                                      IconWithText(icon: Icons.save_alt, text: 'Download Zip'),
+                                      IconWithText(
+                                        click: (){},
+                                        icon: Icons.web_asset,
+                                        text: 'Web Asset'
+                                      ),
+                                      IconWithText(click: (){},icon: Icons.delete, text: 'Edit Task'),
+                                      IconWithText(click: (){},icon: Icons.design_services, text: 'Delete Task'),
+                                      IconWithText(click: () async => await download(context,1),icon: Icons.arrow_downward, text: 'Download Tar'),
+                                      IconWithText(
+                                        click: () async => await download(context,2),
+                                        icon: Icons.save_alt,
+                                        text: 'Download Zip'
+                                      ),
                                     ]
                                   ),
                                   const Divider(color: Color.fromARGB(255, 229, 231, 235)),

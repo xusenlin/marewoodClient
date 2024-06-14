@@ -58,3 +58,46 @@ Future<Response> sendRequest({
   var decodedResponse = jsonDecode(responseString);
   return Response.fromJson(decodedResponse);
 }
+
+
+Future<http.Response> request({
+  required String endpoint,
+  required HttpMethod method,
+  Map<String, String>? headers,
+  dynamic  body,
+}) async {
+
+  var address = await SystemStore.getAddress();
+  if (address == null || !address.contains("http")) {
+    throw Exception("baseUrl error");
+  }
+  var token = await UserStore.getToken();
+  headers ??= {};
+  if (token != null) {
+    headers['Authorization'] = token;
+  }
+
+  var url = Uri.parse('$address$endpoint');
+  http.Response response;
+
+  switch (method) {
+    case HttpMethod.post:
+      response = await http.post(url, headers: headers, body: jsonEncode(body));
+      break;
+    case HttpMethod.get:
+      response = await http.get(url, headers: headers);
+      break;
+    case HttpMethod.put:
+      response = await http.put(url, headers: headers, body: jsonEncode(body));
+      break;
+    case HttpMethod.delete:
+      response = await http.delete(url, headers: headers);
+      break;
+    default:
+      throw Exception('Unsupported HTTP method: $method');
+  }
+  if (response.statusCode != 200) {
+    throw Exception('Error: ${response.statusCode}, ${response.body}');
+  }
+  return response;
+}

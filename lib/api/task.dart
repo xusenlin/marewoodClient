@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:marewood_client/models/task.dart';
 import 'package:marewood_client/utils/request.dart';
+import 'package:path_provider/path_provider.dart';
 import '../models/pagination.dart';
 
 
@@ -33,4 +37,15 @@ Future<String> runTask(int id) async {
   }
   return response.msg;
 }
+
+Future<String> downloadArchive(Task task,int type) async {
+  final directory = await getApplicationDocumentsDirectory();
+  final filePath = '${directory.path}/${task.commitHash}.zip';
+  String endpoint = "/v1/task/archiver?id=${task.id.toString()}&type=${type.toString()}";
+  final response = await request(endpoint: endpoint, method: HttpMethod.get);
+  final file = File(filePath);
+  await file.writeAsBytes(response.bodyBytes);
+  return filePath;
+}
+
 
