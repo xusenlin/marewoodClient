@@ -163,46 +163,81 @@ class TaskCard extends StatelessWidget{
                               return Container(
                                 width: MediaQuery.of(context).size.width,
                                 height: 400,
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
                                 color: Colors.white,
                                 child: Column(children: [
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      IconWithText(
-                                        click: (){},
-                                        icon: Icons.web_asset,
-                                        text: 'Web Asset'
-                                      ),
-                                      IconWithText(click: (){},icon: Icons.delete, text: 'Edit Task'),
-                                      IconWithText(click: (){},icon: Icons.design_services, text: 'Delete Task'),
-                                      IconWithText(click: () async => await download(context,1),icon: Icons.arrow_downward, text: 'Download Tar'),
-                                      IconWithText(
-                                        click: () async => await download(context,2),
-                                        icon: Icons.save_alt,
-                                        text: 'Download Zip'
-                                      ),
-                                    ]
-                                  ),
-                                  const Divider(color: Color.fromARGB(255, 229, 231, 235)),
-                                  Expanded(
-                                    child: ListView(
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                                    child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
-                                          ListTile(
-                                            title: Text("BuildDir：${task.buildDir}"),
+                                          IconWithText(
+                                              click: (){},
+                                              icon: Icons.web_asset,
+                                              text: 'Web Asset'
                                           ),
-                                          ListTile(
-                                            title: Text("BuildCommand：${task.buildCommand}"),
+                                          IconWithText(click: (){},icon: Icons.delete, text: 'Edit Task'),
+                                          IconWithText(click: (){},icon: Icons.design_services, text: 'Delete Task'),
+                                          IconWithText(click: () async => await download(context,1),icon: Icons.arrow_downward, text: 'Download Tar'),
+                                          IconWithText(
+                                              click: () async => await download(context,2),
+                                              icon: Icons.save_alt,
+                                              text: 'Download Zip'
                                           ),
-                                          ListTile(
-                                            title: const Text("Description："),
-                                            subtitle: Text(task.description),
-                                          )
-                                        ],
-                                      ),
+                                        ]
+                                    ),
                                   ),
-                                ]),
+                                  const SizedBox(height: 10),
+                                  const Divider(),
+                                  const SizedBox(height: 10),
+                                  Padding(
+                                    padding: const EdgeInsets.all(16),
+                                    child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text("BuildDir："),
+                                              Text(task.buildDir,style:  TextStyle(color:  themeProvider.themeColor)),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text("BuildCommand："),
+                                              Text(task.buildCommand,style:  TextStyle(color:  themeProvider.themeColor)),
+                                            ],
+                                          ),
+                                        ]
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                                    child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              const Text("RunTotal："),
+                                              Text(task.runTotal.toString(),style:  TextStyle(color:  themeProvider.themeColor)),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Text("Alias："),
+                                              Text(task.alias,style:  TextStyle(color:  themeProvider.themeColor)),
+                                            ],
+                                          ),
+                                        ]
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  ListTile(
+                                    title: const Text("Description："),
+                                    subtitle: Text(task.description),
+                                  )
+                                ])
                               );
                             },
                           );

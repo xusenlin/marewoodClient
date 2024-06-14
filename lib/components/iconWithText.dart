@@ -14,7 +14,7 @@ class IconWithText extends StatelessWidget {
       children: [
         IconButton(onPressed: click, icon: Icon(icon, size: 24.0)),
         SizedBox(
-          width: 50, // 限制宽度
+          width: 70, // 限制宽度
           child: Text(
             text,
             textAlign: TextAlign.center,
