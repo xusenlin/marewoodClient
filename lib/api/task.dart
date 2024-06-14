@@ -24,3 +24,13 @@ Future<void> updateTaskBranch(int id,String branch) async {
   }
   return;
 }
+
+Future<String> runTask(int id) async {
+  String endpoint = "/v1/task/run?id=${id.toString()}";
+  final response = await sendRequest(endpoint: endpoint, method: HttpMethod.get);
+  if ( !response.status ){
+    throw Exception(response.msg);
+  }
+  return response.msg;
+}
+

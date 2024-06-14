@@ -8,10 +8,10 @@ class TabTask extends StatefulWidget {
   const TabTask({super.key});
 
   @override
-  State<TabTask> createState() => _TaskList();
+  State<TabTask> createState() => TaskList();
 }
 
-class _TaskList extends  State<TabTask>{
+class TaskList extends  State<TabTask>{
   List<Task> tasks = [];
   int currentPage = 1;
   int totalPages = 1;
@@ -24,6 +24,13 @@ class _TaskList extends  State<TabTask>{
   void initState() {
     super.initState();
     fetchTasks();
+  }
+
+  void refresh(){
+    setState(() {
+      currentPage=1;
+      fetchTasks();
+    });
   }
 
   Future<void> fetchTasks() async {

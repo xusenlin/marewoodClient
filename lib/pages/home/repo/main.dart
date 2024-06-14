@@ -7,16 +7,20 @@ class TabRepositories extends StatefulWidget {
   const TabRepositories({super.key});
 
   @override
-  _TabRepositoriesState createState() => _TabRepositoriesState();
+  State<TabRepositories> createState() => TabRepositoriesState();
 }
 
-class _TabRepositoriesState extends State<TabRepositories> {
+class TabRepositoriesState extends State<TabRepositories> {
   SharedPreferences? _prefs;
 
   @override
   void initState() {
     super.initState();
     _loadSharedPreferences();
+  }
+
+  void refresh(){
+    print("refreshRepo");
   }
 
   Future<void> _loadSharedPreferences() async {

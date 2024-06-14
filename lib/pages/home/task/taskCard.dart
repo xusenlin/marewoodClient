@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:marewood_client/models/task.dart';
 import 'package:marewood_client/pages/home/task/status.dart';
 import 'package:marewood_client/pages/home/task/switchBranch.dart';
+import 'package:provider/provider.dart';
 
-import '../../../routes.dart';
+import '../../../api/task.dart';
+import '../../../stores/themeProvider.dart';
 
 
 class TaskCard extends StatelessWidget{
@@ -12,10 +14,63 @@ class TaskCard extends StatelessWidget{
   final Task task;
   final VoidCallback onChangeData;
 
-  final bodyText =  const TextStyle(color:  Colors.grey);
+
+
+  Future<void> onSwitchBranch(BuildContext context) async {
+    try{
+      var index = await switchBranch(task,context);
+      if(index==null)return;
+      onChangeData();
+      if(!context.mounted)return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text("switch branch success")
+        ),
+      );
+    }catch(e){
+      if(!context.mounted)return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(e.toString())
+        ),
+      );
+    }
+  }
+
+  Future<void> onRunTask(BuildContext context) async {
+    try{
+      var msg = await runTask(task.id);
+      onChangeData();
+      if(!context.mounted)return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(msg)
+        ),
+      );
+    }catch(e){
+      if(!context.mounted)return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            behavior: SnackBarBehavior.floating,
+            content: Text(e.toString())
+        ),
+      );
+    }
+
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context);
+    const bodyText =  TextStyle(color:  Colors.grey);
+    var valText =  TextStyle(color:  themeProvider.themeColor);
+
+
     return Card(
       color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 9,horizontal:
@@ -46,8 +101,8 @@ class TaskCard extends StatelessWidget{
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Branch：',style: bodyText),
-                    Text(task.branch,style: bodyText),
+                    const Text('TaskBranch：',style: bodyText),
+                    Text(task.branch,style: valText),
                   ],
                 ),
               ),
@@ -77,7 +132,7 @@ class TaskCard extends StatelessWidget{
                         tooltip: "more action",
                         icon: const Icon(Icons.more_horiz,size: 20,color: Colors.grey),
                         onPressed: () {
-                          Navigator.pushNamed(context, Routes.login);
+                          // Navigator.pushNamed(context, Routes.login);
                         },
                       ),
                       IconButton(
@@ -103,24 +158,12 @@ class TaskCard extends StatelessWidget{
                       IconButton(
                         tooltip: "switch branches",
                         icon: const Icon(Icons.share,size: 20),
-                        onPressed: () async {
-                          var index = await switchBranch(task,context);
-                          if(index==null)return;
-                          onChangeData();
-                          if(!context.mounted)return;
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                                behavior: SnackBarBehavior.floating,
-                                content: Text("switch branch success")
-                            ),
-                          );
-                        },
+                        onPressed: () async => await onSwitchBranch(context),
                       ),
-
                       IconButton(
                         tooltip: "run task",
                         icon: const Icon(Icons.play_circle,size: 20),
-                        onPressed: () {},
+                        onPressed: () async => await onRunTask(context),
                       ),
                     ],
                   )

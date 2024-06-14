@@ -18,13 +18,10 @@ class Home extends StatefulWidget {
 
 
 class _HomePageState extends State<Home> {
-
   int _selectedIndex = 0;
-
-
-  static const List<Widget> _tabContent = [
-    TabTask(),TabRepositories(),TabUsers()
-  ];
+  final  _taskKey = GlobalKey<TaskList>();
+  final  _repoKey = GlobalKey<TabRepositoriesState>();
+  final  _userKey = GlobalKey<TabUserState>();
 
   static const List<String> _tabName = [
     "Task","Repositories","Users"
@@ -35,15 +32,47 @@ class _HomePageState extends State<Home> {
     });
   }
 
+  void _callChildRefresh() {
+    switch (_selectedIndex){
+      case 0:
+        _taskKey.currentState?.refresh();
+      case 1:
+        _repoKey.currentState?.refresh();
+      case 2:
+        _userKey.currentState?.refresh();
+    }
+
+  }
+
   @override
   Widget build(BuildContext context) {
-
+    final List<Widget> tabContent = [
+      TabTask(key: _taskKey),TabRepositories(key: _repoKey),TabUser(key: _userKey)
+    ];
     var userProvider = Provider.of<UserProvider>(context);
     var user = userProvider.user;
 
     return Scaffold(
       appBar: AppBar(
         title: Text(_tabName[_selectedIndex]),
+          actions: <Widget>[
+            PopupMenuButton<String>(
+              onSelected: (String result) {
+                if (result == 'refresh') {
+                  _callChildRefresh();
+                }
+              },
+              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                const PopupMenuItem<String>(
+                  value: 'refresh',
+                  child: ListTile(
+                    leading: Icon(Icons.refresh),
+                    title: Text('Refresh'),
+                  ),
+                ),
+              ],
+            ),
+          ]
       ),
       body: SafeArea(
           child: user == null ?
@@ -51,7 +80,7 @@ class _HomePageState extends State<Home> {
                   child:ElevatedButton( onPressed: () { Navigator.pushNamed(context, Routes.login); },
                   child: const Text("Please log in"))
               )
-              :  _tabContent[_selectedIndex]),
+              :  tabContent[_selectedIndex]),
       drawer: const MainDrawer(),
       bottomNavigationBar: BottomNavBar(
         selectedIndex: _selectedIndex,
