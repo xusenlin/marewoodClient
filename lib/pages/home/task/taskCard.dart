@@ -15,8 +15,6 @@ class TaskCard extends StatelessWidget{
   final Task task;
   final VoidCallback onChangeData;
 
-
-
   Future<void> onSwitchBranch(BuildContext context) async {
     try{
       var index = await switchBranch(task,context);
@@ -84,6 +82,100 @@ class TaskCard extends StatelessWidget{
         ),
       );
     }
+  }
+
+  void moreAction(BuildContext context){
+    var themeProvider = Provider.of<ThemeProvider>(context,listen: false);
+    showModalBottomSheet(
+      showDragHandle: true,
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                  SingleChildScrollView(
+                    scrollDirection:  Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IconWithText(
+                            click: (){},
+                            icon: Icons.web_asset,
+                            text: 'Web Asset'
+                        ),
+                        IconWithText(
+                            click: () async => await download(context,2),
+                            icon: Icons.copy,
+                            text: 'Copy Url'
+                        ),
+                        IconWithText(click: (){},icon: Icons.delete, text: 'Edit Task'),
+                        IconWithText(click: (){},icon: Icons.design_services, text: 'Delete Task'),
+                        IconWithText(click: () async => await download(context,1),icon: Icons.save_alt, text: 'Download Tar'),
+                        IconWithText(
+                            click: () async => await download(context,2),
+                            icon: Icons.save_alt,
+                            text: 'Download Zip'
+                        ),
+
+                      ]
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  const Divider(),
+                  const SizedBox(height: 10),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Text("BuildDir："),
+                            Text(task.buildDir,style:  TextStyle(color:  themeProvider.themeColor)),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Text("BuildCommand："),
+                            Text(task.buildCommand,style:  TextStyle(color:  themeProvider.themeColor)),
+                          ],
+                        ),
+                      ]
+                  ),
+                  const SizedBox(height: 20),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            const Text("RunTotal："),
+                            Text(task.runTotal.toString(),style:  TextStyle(color:  themeProvider.themeColor)),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const Text("Alias："),
+                            Text(task.alias,style:  TextStyle(color:  themeProvider.themeColor)),
+                          ],
+                        ),
+                      ]
+                  ),
+                  const SizedBox(height: 20),
+                  const Text("Description："),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                      child: Text(task.description),
+                  )
+            ])
+        );
+      },
+    );
   }
 
   @override
@@ -154,95 +246,7 @@ class TaskCard extends StatelessWidget{
                       IconButton(
                         tooltip: "more action",
                         icon: const Icon(Icons.more_horiz,size: 20,color: Colors.grey),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            showDragHandle: true,
-                            backgroundColor: Colors.white,
-                            context: context,
-                            builder: (BuildContext context) {
-                              return Container(
-                                width: MediaQuery.of(context).size.width,
-                                height: 400,
-                                color: Colors.white,
-                                child: Column(children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                                    child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          IconWithText(
-                                              click: (){},
-                                              icon: Icons.web_asset,
-                                              text: 'Web Asset'
-                                          ),
-                                          IconWithText(click: (){},icon: Icons.delete, text: 'Edit Task'),
-                                          IconWithText(click: (){},icon: Icons.design_services, text: 'Delete Task'),
-                                          IconWithText(click: () async => await download(context,1),icon: Icons.arrow_downward, text: 'Download Tar'),
-                                          IconWithText(
-                                              click: () async => await download(context,2),
-                                              icon: Icons.save_alt,
-                                              text: 'Download Zip'
-                                          ),
-                                        ]
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  const Divider(),
-                                  const SizedBox(height: 10),
-                                  Padding(
-                                    padding: const EdgeInsets.all(16),
-                                    child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              const Text("BuildDir："),
-                                              Text(task.buildDir,style:  TextStyle(color:  themeProvider.themeColor)),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Text("BuildCommand："),
-                                              Text(task.buildCommand,style:  TextStyle(color:  themeProvider.themeColor)),
-                                            ],
-                                          ),
-                                        ]
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                                    child: Row(
-                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              const Text("RunTotal："),
-                                              Text(task.runTotal.toString(),style:  TextStyle(color:  themeProvider.themeColor)),
-                                            ],
-                                          ),
-                                          Row(
-                                            children: [
-                                              const Text("Alias："),
-                                              Text(task.alias,style:  TextStyle(color:  themeProvider.themeColor)),
-                                            ],
-                                          ),
-                                        ]
-                                    ),
-                                  ),
-                                  const SizedBox(height: 20),
-                                  ListTile(
-                                    title: const Text("Description："),
-                                    subtitle: Text(task.description),
-                                  )
-                                ])
-                              );
-                            },
-                          );
-                          // Navigator.pushNamed(context, Routes.login);
-                        },
+                        onPressed: () => moreAction(context),
                       ),
                       IconButton(
                         tooltip: "terminal info",
