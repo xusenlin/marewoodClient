@@ -1,91 +1,80 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marewood_client/models/task.dart';
 import 'package:marewood_client/pages/home/task/status.dart';
 import 'package:marewood_client/pages/home/task/switchBranch.dart';
+import 'package:marewood_client/stores/system.dart';
+import 'package:marewood_client/stores/user.dart';
 import 'package:provider/provider.dart';
 
 import '../../../api/task.dart';
 import '../../../components/iconWithText.dart';
 import '../../../stores/themeProvider.dart';
 
-
-class TaskCard extends StatelessWidget{
+class TaskCard extends StatelessWidget {
   const TaskCard({super.key, required this.task, required this.onChangeData});
 
   final Task task;
   final VoidCallback onChangeData;
 
   Future<void> onSwitchBranch(BuildContext context) async {
-    try{
-      var index = await switchBranch(task,context);
-      if(index==null)return;
+    try {
+      var index = await switchBranch(task, context);
+      if (index == null) return;
       onChangeData();
-      if(!context.mounted)return;
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             behavior: SnackBarBehavior.floating,
-            content: Text("switch branch success")
-        ),
+            content: Text("switch branch success")),
       );
-    }catch(e){
-      if(!context.mounted)return;
+    } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            behavior: SnackBarBehavior.floating,
-            content: Text(e.toString())
-        ),
+            behavior: SnackBarBehavior.floating, content: Text(e.toString())),
       );
     }
   }
 
   Future<void> onRunTask(BuildContext context) async {
-    try{
+    try {
       var msg = await runTask(task.id);
       onChangeData();
-      if(!context.mounted)return;
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            behavior: SnackBarBehavior.floating,
-            content: Text(msg)
-        ),
+        SnackBar(behavior: SnackBarBehavior.floating, content: Text(msg)),
       );
-    }catch(e){
-      if(!context.mounted)return;
+    } catch (e) {
+      if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-            behavior: SnackBarBehavior.floating,
-            content: Text(e.toString())
-        ),
-      );
-    }
-
-  }
-
-  Future<void> download(BuildContext context,int type) async {
-    try{
-      var file = await downloadArchive(task,type);
-      if(!context.mounted)return;
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            behavior: SnackBarBehavior.floating,
-            content: Text(file)
-        ),
-      );
-    }catch(e){
-      if(!context.mounted)return;
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            behavior: SnackBarBehavior.floating,
-            content: Text(e.toString())
-        ),
+            behavior: SnackBarBehavior.floating, content: Text(e.toString())),
       );
     }
   }
 
-  void moreAction(BuildContext context){
-    var themeProvider = Provider.of<ThemeProvider>(context,listen: false);
+  Future<void> download(BuildContext context, int type) async {
+    try {
+      var file = await downloadArchive(task, type);
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(behavior: SnackBarBehavior.floating, content: Text(file)),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            behavior: SnackBarBehavior.floating, content: Text(e.toString())),
+      );
+    }
+  }
+
+  void moreAction(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
     showModalBottomSheet(
       showDragHandle: true,
       backgroundColor: Colors.white,
@@ -95,85 +84,105 @@ class TaskCard extends StatelessWidget{
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                  SingleChildScrollView(
-                    scrollDirection:  Axis.horizontal,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+            child:
+                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      IconWithText(
+                          click: () {},
+                          icon: Icons.web_asset,
+                          text: 'Web Asset'),
+                      IconWithText(
+                          click: () async {
+                            Navigator.of(context).pop();
+                            var address = await SystemStore.getAddress();
+                            if (address == null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                    behavior: SnackBarBehavior.floating,
+                                    content: Text("address is null")),
+                              );
+                              return;
+                            }
+                            address += "/webs/${task.alias}";
+                            Clipboard.setData(ClipboardData(text: address));
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  behavior: SnackBarBehavior.floating,
+                                  content: Text("copy $address")),
+                            );
+                          },
+                          icon: Icons.copy,
+                          text: 'Copy Url'),
+                      IconWithText(
+                          click: () {}, icon: Icons.design_services, text: 'Edit Task'),
+                      IconWithText(
+                          click: () {},
+                          icon: Icons.delete,
+                          text: 'Delete Task'),
+                      IconWithText(
+                          click: () async => await download(context, 1),
+                          icon: Icons.save_alt,
+                          text: 'Download Tar'),
+                      IconWithText(
+                          click: () async => await download(context, 2),
+                          icon: Icons.save_alt,
+                          text: 'Download Zip'),
+                    ]),
+              ),
+              const SizedBox(height: 10),
+              const Divider(),
+              const SizedBox(height: 10),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        IconWithText(
-                            click: (){},
-                            icon: Icons.web_asset,
-                            text: 'Web Asset'
-                        ),
-                        IconWithText(
-                            click: () async => await download(context,2),
-                            icon: Icons.copy,
-                            text: 'Copy Url'
-                        ),
-                        IconWithText(click: (){},icon: Icons.delete, text: 'Edit Task'),
-                        IconWithText(click: (){},icon: Icons.design_services, text: 'Delete Task'),
-                        IconWithText(click: () async => await download(context,1),icon: Icons.save_alt, text: 'Download Tar'),
-                        IconWithText(
-                            click: () async => await download(context,2),
-                            icon: Icons.save_alt,
-                            text: 'Download Zip'
-                        ),
-
-                      ]
+                        const Text("BuildDir："),
+                        Text(task.buildDir,
+                            style: TextStyle(color: themeProvider.themeColor)),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 10),
-                  const Divider(),
-                  const SizedBox(height: 10),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            const Text("BuildDir："),
-                            Text(task.buildDir,style:  TextStyle(color:  themeProvider.themeColor)),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text("BuildCommand："),
-                            Text(task.buildCommand,style:  TextStyle(color:  themeProvider.themeColor)),
-                          ],
-                        ),
-                      ]
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                        const Text("BuildCommand："),
+                        Text(task.buildCommand,
+                            style: TextStyle(color: themeProvider.themeColor)),
+                      ],
+                    ),
+                  ]),
+              const SizedBox(height: 20),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            const Text("RunTotal："),
-                            Text(task.runTotal.toString(),style:  TextStyle(color:  themeProvider.themeColor)),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            const Text("Alias："),
-                            Text(task.alias,style:  TextStyle(color:  themeProvider.themeColor)),
-                          ],
-                        ),
-                      ]
-                  ),
-                  const SizedBox(height: 20),
-                  const Text("Description："),
-                  Padding(
-                    padding: const EdgeInsets.all(20),
-                      child: Text(task.description),
-                  )
-            ])
-        );
+                        const Text("RunTotal："),
+                        Text(task.runTotal.toString(),
+                            style: TextStyle(color: themeProvider.themeColor)),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        const Text("Alias："),
+                        Text(task.alias,
+                            style: TextStyle(color: themeProvider.themeColor)),
+                      ],
+                    ),
+                  ]),
+              const SizedBox(height: 20),
+              const Text("Description："),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(task.description),
+              )
+            ]));
       },
     );
   }
@@ -181,110 +190,112 @@ class TaskCard extends StatelessWidget{
   @override
   Widget build(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context);
-    const bodyText =  TextStyle(color:  Colors.grey);
-    var valText =  TextStyle(color:  themeProvider.themeColor);
-
+    const bodyText = TextStyle(color: Colors.grey);
+    var valText = TextStyle(color: themeProvider.themeColor);
 
     return Card(
       color: Colors.white,
-      margin: const EdgeInsets.symmetric(vertical: 9,horizontal:
-      18),
+      margin: const EdgeInsets.symmetric(vertical: 9, horizontal: 18),
       child: Padding(
-          padding: const EdgeInsets.only(left: 12,right: 12,top: 18),
-          child: Column(
+        padding: const EdgeInsets.only(left: 12, right: 12, top: 18),
+        child: Column(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Expanded(
+                child: Text('${task.tag}${task.name}',
+                    overflow: TextOverflow.ellipsis,
+                    style:
+                        const TextStyle(color: Color.fromARGB(255, 3, 7, 18))),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Status(status: task.status),
+              ),
+              // Text('Status:${task.status.toString()}'),
+            ],
+          ),
+          // const Divider(color: Color.fromARGB(255, 229, 231, 235)),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 14),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text('TaskBranch：', style: bodyText),
+                Text(task.branch, style: valText),
+              ],
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('CommitHash：', style: bodyText),
+              Text(task.commitHash, style: valText),
+            ],
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Expanded(
-                      child:Text(
-                          '${task.tag}${task.name}',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(color: Color.fromARGB(255, 3, 7, 18))),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 20),
-                    child: Status(status: task.status),
+                    padding: const EdgeInsets.only(right: 4),
+                    child: Text('#${task.id.toString()}',
+                        style: TextStyle(color: themeProvider.themeColor)),
                   ),
-                  // Text('Status:${task.status.toString()}'),
+                  if (task.private)
+                    const Icon(Icons.lock_outline,
+                        color: Colors.green, size: 16),
                 ],
               ),
-              // const Divider(color: Color.fromARGB(255, 229, 231, 235)),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('TaskBranch：',style: bodyText),
-                    Text(task.branch,style: valText),
-                  ],
-                ),
-              ),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text('CommitHash：',style: bodyText),
-                  Text(task.commitHash,style: valText),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: Text('#${task.id.toString()}',style:  TextStyle(color:  themeProvider.themeColor)),
-                      ),
-                      if(task.private)const Icon(Icons.lock_outline,color: Colors.green,size: 16),
-                    ],
+                  IconButton(
+                    tooltip: "more action",
+                    icon: const Icon(Icons.more_horiz,
+                        size: 20, color: Colors.grey),
+                    onPressed: () => moreAction(context),
                   ),
-                  Row(
-                    children: [
-                      IconButton(
-                        tooltip: "more action",
-                        icon: const Icon(Icons.more_horiz,size: 20,color: Colors.grey),
-                        onPressed: () => moreAction(context),
-                      ),
-                      IconButton(
-                        tooltip: "terminal info",
-                        icon: const Icon(Icons.terminal_outlined,size: 20),
-                        onPressed: () {
-                          showModalBottomSheet(
-                            showDragHandle: true,
-                            backgroundColor: Colors.white,
-                            context: context,
-                            builder: (BuildContext context) {
-                              return SingleChildScrollView(child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                padding: const EdgeInsets.all(16),
-                                color: Colors.white,
-                                child:Text(task.terminalInfo,style: const TextStyle(color: Colors.black87,fontSize: 12)),
-                              ));
-                            },
-                          );
+                  IconButton(
+                    tooltip: "terminal info",
+                    icon: const Icon(Icons.terminal_outlined, size: 20),
+                    onPressed: () {
+                      showModalBottomSheet(
+                        showDragHandle: true,
+                        backgroundColor: Colors.white,
+                        context: context,
+                        builder: (BuildContext context) {
+                          return SingleChildScrollView(
+                              child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.all(16),
+                            color: Colors.white,
+                            child: Text(task.terminalInfo,
+                                style: const TextStyle(
+                                    color: Colors.black87, fontSize: 12)),
+                          ));
                         },
-                      ),
-                      IconButton(
-                        tooltip: "switch branches",
-                        icon: const Icon(Icons.share,size: 20),
-                        onPressed: () async => await onSwitchBranch(context),
-                      ),
-                      IconButton(
-                        tooltip: "run task",
-                        icon: const Icon(Icons.play_circle,size: 20),
-                        onPressed: () async => await onRunTask(context),
-                      ),
-                    ],
-                  )
+                      );
+                    },
+                  ),
+                  IconButton(
+                    tooltip: "switch branches",
+                    icon: const Icon(Icons.share, size: 20),
+                    onPressed: () async => await onSwitchBranch(context),
+                  ),
+                  IconButton(
+                    tooltip: "run task",
+                    icon: const Icon(Icons.play_circle, size: 20),
+                    onPressed: () async => await onRunTask(context),
+                  ),
                 ],
-              ),
-              
-          ]),
+              )
+            ],
+          ),
+        ]),
       ),
     );
   }
-
 }
