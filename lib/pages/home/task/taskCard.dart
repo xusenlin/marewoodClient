@@ -9,6 +9,7 @@ import 'package:provider/provider.dart';
 
 import '../../../api/task.dart';
 import '../../../components/iconWithText.dart';
+import '../../../routes.dart';
 import '../../../stores/themeProvider.dart';
 
 class TaskCard extends StatelessWidget {
@@ -93,7 +94,13 @@ class TaskCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       IconWithText(
-                          click: () {},
+                          click: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.taskWebView,
+                              arguments: task,
+                            );
+                          },
                           icon: Icons.web_asset,
                           text: 'Web Asset'),
                       IconWithText(

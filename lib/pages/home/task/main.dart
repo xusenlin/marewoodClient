@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../../stores/userProvider.dart';
 import '../../../utils/sse.dart';
 import './taskCard.dart';
 import '../../../api/task.dart';
@@ -68,6 +70,10 @@ class TaskList extends  State<TabTask>{
             content: Text(e.toString())
         ),
       );
+      if(e.toString().contains("token is expired")){
+        var userProvider = Provider.of<UserProvider>(context,listen: false);
+        userProvider.removeUser();
+      }
     }
   }
 
