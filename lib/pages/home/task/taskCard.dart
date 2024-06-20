@@ -54,6 +54,24 @@ class TaskCard extends StatelessWidget {
       );
     }
   }
+  Future<void> delTask(BuildContext context) async {
+    try {
+      var msg = await deleteTask(6666);
+      onChangeData();
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(behavior: SnackBarBehavior.floating, content: Text(msg)),
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      Navigator.of(context).pop();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+            behavior: SnackBarBehavior.floating, content: Text(e.toString())),
+      );
+    }
+  }
 
   Future<void> download(BuildContext context, int type) async {
     try {
@@ -126,9 +144,13 @@ class TaskCard extends StatelessWidget {
                           icon: Icons.copy,
                           text: 'Copy Url'),
                       IconWithText(
-                          click: () {}, icon: Icons.design_services, text: 'Edit Task'),
+                          click: () {
+                            Navigator.pushNamed(context, Routes.taskEdit,arguments: task);
+                          },
+                          icon: Icons.design_services,
+                          text: 'Edit Task'),
                       IconWithText(
-                          click: () {},
+                          click: () async => await delTask(context),
                           icon: Icons.delete,
                           text: 'Delete Task'),
                       IconWithText(

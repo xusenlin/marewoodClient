@@ -1,6 +1,7 @@
 import 'package:marewood_client/models/task.dart';
 import 'package:marewood_client/pages/localStores/main.dart';
 import 'package:marewood_client/pages/login/login.dart';
+import 'package:marewood_client/pages/taskEdit/main.dart';
 import 'package:marewood_client/pages/taskWebView/main.dart';
 
 
@@ -13,7 +14,8 @@ class Routes {
   static const String home = '/';
   static const String stores = '/stores';
   static const String login = '/login';
-  static const String taskWebView = '/webView';
+  static const String taskEdit = '/taskEdit';
+  static const String taskWebView = '/taskWebView';
 
 
   static Map<String, WidgetBuilder> getRoutes() {
@@ -21,6 +23,10 @@ class Routes {
       home: (context) => const Home(),
       login: (context) => const Login(),
       stores:(context) => const LocalStores(),
+      taskEdit:(context){
+        final args = ModalRoute.of(context)?.settings.arguments as Task?;
+        return TaskEdit(task: args);
+      },
       taskWebView:(context){
         final args = ModalRoute.of(context)?.settings.arguments as Task?;
         if (args != null) {

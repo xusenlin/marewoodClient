@@ -49,3 +49,11 @@ Future<String> downloadArchive(Task task,int type) async {
 }
 
 
+Future<String> deleteTask(int id) async {
+  String endpoint = "/v1/task/${id.toString()}";
+  final response = await sendRequest(endpoint: endpoint, method: HttpMethod.delete);
+  if ( !response.status ){
+    throw Exception(response.msg);
+  }
+  return response.msg;
+}

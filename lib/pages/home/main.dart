@@ -44,6 +44,15 @@ class _HomePageState extends State<Home> {
 
   }
 
+  void clickFloatingButton(){
+    switch (_selectedIndex){
+      case 0:
+        Navigator.pushNamed(context, Routes.taskEdit);
+      case 1:
+      case 2:
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> tabContent = [
@@ -87,10 +96,7 @@ class _HomePageState extends State<Home> {
         onItemTapped: _onItemTapped,
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Add your onPressed code here!
-          print('Floating Action Button Pressed!');
-        },
+        onPressed: () => clickFloatingButton(),
         tooltip: 'Increment',
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(40.0),
