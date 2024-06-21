@@ -51,10 +51,9 @@ class _TaskEditState extends State<TaskEdit> {
                 onChanged: (text) {
                 },
                 onClearTap: () {
-
+                  nameController.text = "";
                 },
               ),
-              SizedBox(height: 10),
               TDInput(
                 contentAlignment:TextAlign.end,
                 leftLabel: 'Alias',

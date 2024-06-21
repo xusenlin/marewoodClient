@@ -9,7 +9,6 @@ import '../../../models/task.dart';
 
 class TabTask extends StatefulWidget {
   const TabTask({super.key});
-
   @override
   State<TabTask> createState() => TaskList();
 }
@@ -28,11 +27,12 @@ class TaskList extends  State<TabTask>{
 
   @override
   void initState() {
-    super.initState();
     fetchTasks();
-    Future.delayed(const Duration(seconds: 2), () {
-      if (mounted) {subscribeTaskEvent();}
-    });
+    // Future.delayed(const Duration(seconds: 2), () {
+    //   if (mounted) {subscribeTaskEvent();}
+    // });
+    subscribeTaskEvent();
+    super.initState();
   }
 
   void refresh(){
@@ -49,8 +49,6 @@ class TaskList extends  State<TabTask>{
     try{
       var pagination = await fetchTasksPagination(
         pageNum: currentPage,
-        name: name,
-        tags: tags,
       );
       setState(() {
         tasks = pagination.list.map((item) => Task.fromJson(item)).toList();
@@ -126,6 +124,7 @@ class TaskList extends  State<TabTask>{
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
+      if(tasks.isNotEmpty)
       ListView.builder(
         itemCount: tasks.length+1,
         itemBuilder: (context, index) {
@@ -142,7 +141,7 @@ class TaskList extends  State<TabTask>{
               ),
             );
           }
-          return TaskCard(task: tasks[index],onChangeData: fetchTasks,);
+          return TaskCard(task: tasks[index],onChangeData: fetchTasks);
         },
       ),
       if (isLoading)
