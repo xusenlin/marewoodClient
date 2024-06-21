@@ -2,19 +2,39 @@ import 'package:flutter/material.dart';
 import 'package:marewood_client/models/task.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
-class TaskEdit extends StatelessWidget {
-  TaskEdit({super.key, this.task});
 
-  final Task ? task;
+class TaskEdit extends StatefulWidget {
+  final Task? task;
 
-  final TextEditingController nameController = TextEditingController();
+  const TaskEdit({super.key, this.task});
+  @override
+  State<TaskEdit> createState() => _TaskEditState();
+}
+
+class _TaskEditState extends State<TaskEdit> {
+
+
+  late TextEditingController nameController = TextEditingController(text: widget.task?.name);
+
+  @override
+  void initState() {
+    super.initState();
+    // nameController = TextEditingController(text: widget.task?.name);
+  }
+
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(task==null ? "New Task":task!.name),
+        title: Text(widget.task==null ? "New Task":widget.task!.name),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -25,7 +45,7 @@ class TaskEdit extends StatelessWidget {
                 leftLabel: 'Name',
                 contentAlignment:TextAlign.end,
                 required: true,
-                // controller: ,
+                controller: nameController,
                 backgroundColor: Colors.white,
                 hintText: 'Please enter name',
                 onChanged: (text) {
