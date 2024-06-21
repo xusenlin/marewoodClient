@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:marewood_client/api/repository.dart';
 import 'package:marewood_client/models/repository.dart';
+import 'package:marewood_client/pages/home/repo/repoCard.dart';
 import 'package:provider/provider.dart';
 
 import '../../../components/pagination.dart';
@@ -138,7 +139,10 @@ class TabRepositoriesState extends State<TabRepositories> {
               ),
             );
           }
-          return Text("sad");
+          return RepositoryCard(
+              repository: repositories[index],
+              onChangeData: refresh
+          );
         },
       ),
       if (isLoading)

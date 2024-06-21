@@ -1,63 +1,56 @@
 import 'package:flutter/material.dart';
+import 'package:marewood_client/components/pagination.dart';
 import 'package:provider/provider.dart';
-import '../../../stores/userProvider.dart';
-import '../../../utils/sse.dart';
-import './taskCard.dart';
-import '../../../api/task.dart';
-import '../../../components/pagination.dart';
-import '../../../models/task.dart';
 
-class TabTask extends StatefulWidget {
-  const TabTask({super.key});
+import '../models/pagination.dart';
+import '../stores/userProvider.dart';
+
+class ListPagination extends StatefulWidget {
+  final Map<String,dynamic> ? parameter;
+  final Future<PaginationData> Function({ int pageNum,int pageSize,Map<String,dynamic> ? parameter}) paginationReq;
+  final Widget Function({ Map<String,dynamic> item,VoidCallback refresh }) itemBuilder;
+
+  const ListPagination({super.key, required this.itemBuilder,  required this.paginationReq, this.parameter});
+
   @override
-  State<TabTask> createState() => TaskListState();
+  State<ListPagination> createState() => _List();
 }
 
-class TaskListState extends  State<TabTask>{
+class _List extends State<ListPagination> {
 
-  late SseClient sseClient;
-
-  List<Task> tasks = [];
   int currentPage = 1;
   int totalPages = 1;
   bool isLoading = false;
-  String name = "";
-  String tags = "";
-
+  late List<Map<String,dynamic>> items;
 
   @override
   void initState() {
-    fetchTasks();
-    // Future.delayed(const Duration(seconds: 2), () {
-    //   if (mounted) {subscribeTaskEvent();}
-    // });
-    subscribeTaskEvent();
     super.initState();
   }
-
   void refresh(){
     setState(() {
       currentPage=1;
-      fetchTasks();
+      fetchItems();
     });
   }
 
-  Future<void> fetchTasks() async {
+  Future<void> fetchItems() async {
     setState(() {
       isLoading = true;
     });
     try{
-      var pagination = await fetchTasksPagination(
+      var pagination = await widget.paginationReq(
         pageNum: currentPage,
+        parameter: widget.parameter
       );
       setState(() {
-        tasks = pagination.list.map((item) => Task.fromJson(item)).toList();
+        items = pagination.list;
         totalPages = pagination.totalPage;
         isLoading = false;
       });
     }catch(e){
       setState(() {
-        tasks = [];
+        items = [];
         totalPages = 1;
         isLoading = false;
       });
@@ -78,57 +71,23 @@ class TaskListState extends  State<TabTask>{
   void _previousPage() {
     setState(() {
       currentPage--;
-      fetchTasks();
+      fetchItems();
     });
   }
   void _nextPage() {
     setState(() {
       currentPage++;
-      fetchTasks();
+      fetchItems();
     });
-  }
-
-
-  void subscribeTaskEvent(){
-    sseClient = SseClient('/v1/event/task');
-    sseClient.stream.listen((data) {
-      // const eventTypeEditOk = "editOk"
-      // const eventTypeDestroyOk = "destroyOk"
-      // const eventTaskTypeRunOk = "runOk"
-      // const eventTaskTypeBuildOk = "buildOk"
-      // const eventTaskTypeBuildFail = "buildFail"
-      // if(data=="buildOk"){
-      //   fetchTasks();
-      // }
-      setState(() {
-        currentPage=1;
-        fetchTasks();
-      });
-    },onError: (e){
-      if(!mounted)return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text(e.toString())
-        ),
-      );
-    });
-  }
-
-  @override
-  void dispose() {
-    sseClient.close();
-    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
-      if(tasks.isNotEmpty)
       ListView.builder(
-        itemCount: tasks.length+1,
+        itemCount: items.length+1,
         itemBuilder: (context, index) {
-          if (index == tasks.length) {
+          if (index == items.length) {
             return Padding(
               padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Center(
@@ -141,7 +100,7 @@ class TaskListState extends  State<TabTask>{
               ),
             );
           }
-          return TaskCard(task: tasks[index],onChangeData: refresh);
+          return widget.itemBuilder(item:items[index],refresh: refresh);
         },
       ),
       if (isLoading)

@@ -275,8 +275,7 @@ class TaskCard extends StatelessWidget {
                         style: TextStyle(color: themeProvider.themeColor)),
                   ),
                   if (task.private)
-                    const Icon(Icons.lock_outline,
-                        color: Colors.green, size: 16),
+                    Icon(Icons.lock_outline, color: themeProvider.themeColor, size: 16),
                 ],
               ),
               Row(
