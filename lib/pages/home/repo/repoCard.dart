@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:marewood_client/pages/home/repo/status.dart';
 import 'package:provider/provider.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../../api/repository.dart';
+import '../../../components/terminalOutDisplay.dart';
 import '../../../models/repository.dart';
 import '../../../stores/themeProvider.dart';
 
@@ -77,43 +80,36 @@ class RepositoryCard extends StatelessWidget {
                 children: [
                   IconButton(
                     tooltip: "more action",
-                    icon: const Icon(Icons.more_horiz,
-                        size: 20, color: Colors.grey),
-                    onPressed: () {},
+                    icon: const Icon(
+                        Icons.more_horiz,
+                        size: 20, color: Colors.grey
+                    ),
+                    onPressed: () {
+                      TDToast.showText('Under development', context: context);
+                    },
                   ),
                   IconButton(
                     tooltip: "terminal info",
                     icon: const Icon(Icons.terminal_outlined, size: 20),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        showDragHandle: true,
-                        backgroundColor: Colors.white,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SingleChildScrollView(
-                              child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.all(16),
-                            color: Colors.white,
-                            child: Text(repository.terminalInfo,
-                                style: const TextStyle(
-                                    color: Colors.black87, fontSize: 12)),
-                          ));
-                        },
-                      );
-                    },
+                    onPressed: () => terminalOutDisplay(context,repository.terminalInfo),
                   ),
                   //
                   IconButton(
                     tooltip: "git checkout .",
                     icon: const Icon(Icons.replay, size: 20),
                     onPressed: () async {
+                      var msg = await execGitCheckoutDot(repository.id);
+                      if(!context.mounted)return;
+                      TDToast.showText(msg, context: context);
                     },
                   ),
                   IconButton(
-                    tooltip: "git Pull",
+                    tooltip: "git pull",
                     icon: const Icon(Icons.import_export, size: 20),
                     onPressed: () async {
+                      var msg = await execGitPull(repository.id);
+                      if(!context.mounted)return;
+                      TDToast.showText(msg, context: context);
                     },
                   ),
                 ],

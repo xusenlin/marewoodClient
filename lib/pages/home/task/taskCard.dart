@@ -10,6 +10,7 @@ import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../../api/task.dart';
 import '../../../components/iconWithText.dart';
+import '../../../components/terminalOutDisplay.dart';
 import '../../../routes.dart';
 import '../../../stores/themeProvider.dart';
 
@@ -258,24 +259,7 @@ class TaskCard extends StatelessWidget {
                   IconButton(
                     tooltip: "terminal info",
                     icon: const Icon(Icons.terminal_outlined, size: 20),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        showDragHandle: true,
-                        backgroundColor: Colors.white,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SingleChildScrollView(
-                              child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.all(16),
-                            color: Colors.white,
-                            child: Text(task.terminalInfo,
-                                style: const TextStyle(
-                                    color: Colors.black87, fontSize: 12)),
-                          ));
-                        },
-                      );
-                    },
+                    onPressed: () => terminalOutDisplay(context,task.terminalInfo),
                   ),
                   IconButton(
                     tooltip: "switch branches",

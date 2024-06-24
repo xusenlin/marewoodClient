@@ -23,11 +23,11 @@ class BottomNavBar extends StatelessWidget {
           label: 'Task',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.source),
+          icon: Icon(Icons.workspaces),
           label: 'Repositories',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: Icon(Icons.group),
           label: 'Users',
         ),
       ],

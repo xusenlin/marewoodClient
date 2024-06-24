@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:marewood_client/models/task.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
-
-import '../../../api/repo.dart';
+import '../../../api/repository.dart';
 import '../../../api/task.dart';
 
 Future<int?> switchBranch(Task task,BuildContext context) async {
   try{
     TDToast.showLoadingWithoutText(context: context);
-    List<dynamic> branch = await fetchRepositoryBranch(task.repositoryId);
+    List<dynamic> branch = await fetchRepoBranch(task.repositoryId);
     TDToast.dismissLoading();
     if(!context.mounted){
       throw Exception("Context not mounted");
