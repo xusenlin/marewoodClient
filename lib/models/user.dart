@@ -33,3 +33,36 @@ class User {
     };
   }
 }
+
+
+
+class UseUser {
+  final int id;
+  final int role;
+  final int status;
+  final String username;
+
+  UseUser({
+    required this.id,
+    required this.role,
+    required this.status,
+    required this.username,
+  });
+
+  factory UseUser.fromJson(Map<String, dynamic> json) {
+    return UseUser(
+      id: json['id'],
+      role: json['role'],
+      status: json['status'],
+      username: json['username'],
+    );
+  }
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'role': role,
+      'status': status,
+      'username': username,
+    };
+  }
+}

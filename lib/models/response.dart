@@ -10,13 +10,10 @@ class Response{
   });
 
   factory Response.fromJson(Map<String, dynamic> json) {
-
     return Response(
       data: json['data'],
       msg: json['msg'],
       status: json['status'],
     );
   }
-
-
 }

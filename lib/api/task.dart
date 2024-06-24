@@ -4,10 +4,12 @@ import 'package:marewood_client/models/task.dart';
 import 'package:marewood_client/utils/request.dart';
 import 'package:path_provider/path_provider.dart';
 import '../models/pagination.dart';
+import '../utils/common.dart';
 
 
-Future<PaginationData> fetchTasksPagination({ int pageNum = 1,int pageSize = 10,String name = "",String tags = "",String id = ""}) async {
-  String endpoint = "/v1/tasks?pageNum=$pageNum&pageSize=$pageSize&name=$name&tags=$tags&id=$id";
+Future<PaginationData> fetchTasksPagination({ int pageNum = 1,int pageSize = 10,Map<String,dynamic> ? params}) async {
+  String paramsUrl = mapToUrlParams(params);
+  String endpoint = "/v1/tasks?pageNum=$pageNum&pageSize=$pageSize&$paramsUrl";
   final response = await sendRequest(endpoint: endpoint, method: HttpMethod.get);
   // final String responseJson = await rootBundle.loadString('assets/mock/task.json');
   // var resp = Response.fromJson(jsonDecode(responseJson));

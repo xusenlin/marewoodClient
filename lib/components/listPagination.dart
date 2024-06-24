@@ -5,26 +5,28 @@ import 'package:provider/provider.dart';
 import '../models/pagination.dart';
 import '../stores/userProvider.dart';
 
-class ListPagination extends StatefulWidget {
-  final Map<String,dynamic> ? parameter;
-  final Future<PaginationData> Function({ int pageNum,int pageSize,Map<String,dynamic> ? parameter}) paginationReq;
-  final Widget Function({ Map<String,dynamic> item,VoidCallback refresh }) itemBuilder;
 
-  const ListPagination({super.key, required this.itemBuilder,  required this.paginationReq, this.parameter});
+class ListPagination extends StatefulWidget {
+  final Map<String,dynamic> ? params;
+  final Future<PaginationData> Function({ int pageNum,int pageSize,Map<String,dynamic> ? params}) paginationReq;
+  final Widget? Function(BuildContext context, dynamic item,VoidCallback refresh)  itemBuilder;
+
+  const ListPagination({super.key, required this.itemBuilder,  required this.paginationReq, this.params});
 
   @override
-  State<ListPagination> createState() => _List();
+  State<ListPagination> createState() => ListRender();
 }
 
-class _List extends State<ListPagination> {
+class ListRender extends State<ListPagination> {
 
   int currentPage = 1;
   int totalPages = 1;
   bool isLoading = false;
-  late List<Map<String,dynamic>> items;
+  late List<dynamic> items = [];
 
   @override
   void initState() {
+    fetchItems();
     super.initState();
   }
   void refresh(){
@@ -41,10 +43,11 @@ class _List extends State<ListPagination> {
     try{
       var pagination = await widget.paginationReq(
         pageNum: currentPage,
-        parameter: widget.parameter
+        params: widget.params
       );
       setState(() {
-        items = pagination.list;
+        items = pagination.list ;
+
         totalPages = pagination.totalPage;
         isLoading = false;
       });
@@ -84,6 +87,7 @@ class _List extends State<ListPagination> {
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
+      if(items.isNotEmpty)
       ListView.builder(
         itemCount: items.length+1,
         itemBuilder: (context, index) {
@@ -100,7 +104,7 @@ class _List extends State<ListPagination> {
               ),
             );
           }
-          return widget.itemBuilder(item:items[index],refresh: refresh);
+          return widget.itemBuilder(context,items[index],refresh);
         },
       ),
       if (isLoading)
