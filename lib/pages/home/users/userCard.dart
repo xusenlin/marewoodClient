@@ -1,14 +1,30 @@
 import 'package:flutter/material.dart';
-import 'package:marewood_client/pages/home/repo/status.dart';
+import 'package:marewood_client/models/user.dart';
+import 'package:marewood_client/pages/home/users/status.dart';
 import 'package:provider/provider.dart';
-import '../../../models/repository.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../../stores/themeProvider.dart';
 
-class RepositoryCard extends StatelessWidget {
-  const RepositoryCard({super.key, required this.repository, required this.onChangeData});
+class UserCard extends StatelessWidget {
+  const UserCard({super.key, required this.user, required this.onChangeData});
 
-  final Repository repository;
+  final UseUser user;
   final VoidCallback onChangeData;
+
+  String roleDesc(int val){
+    switch (val){
+      case 1:
+        return "SuperAdministrator";
+      case 3:
+        return "Administer";
+      case 6:
+        return "Developer";
+      case 10:
+        return "Reporter";
+      default:
+        return "Invalid";
+    }
+  }
 
 
   @override
@@ -27,14 +43,14 @@ class RepositoryCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: Text(repository.name,
+                child: Text("UserName：${user.username}",
                     overflow: TextOverflow.ellipsis,
                     style:
                         const TextStyle(color: Color.fromARGB(255, 3, 7, 18))),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 20),
-                child: Status(status: repository.status),
+                child: Status(status: user.status),
               ),
               // Text('Status:${task.status.toString()}'),
             ],
@@ -45,16 +61,18 @@ class RepositoryCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('DefaultBranch：', style: bodyText),
-                Text(repository.defaultBranch, style: valText),
+                const Text('Role：', style: bodyText),
+                Text(roleDesc(user.role), style: valText),
               ],
             ),
+
+              // updatedAt
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text('DependTools：', style: bodyText),
-              Text(repository.dependTools.toUpperCase(), style: valText),
+              const Text('UpdatedAt：', style: bodyText),
+              Text(user.updatedAt, style: valText),
             ],
           ),
           const SizedBox(height: 10),
@@ -66,54 +84,25 @@ class RepositoryCard extends StatelessWidget {
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(right: 4),
-                    child: Text('#${repository.id.toString()}',
+                    child: Text('#${user.id.toString()}',
                         style: TextStyle(color: themeProvider.themeColor)),
                   ),
-                  if (repository.userName != ""&&repository.password != "")
-                    Icon(Icons.lock_outline, color: themeProvider.themeColor, size: 16),
                 ],
               ),
               Row(
                 children: [
                   IconButton(
-                    tooltip: "more action",
-                    icon: const Icon(Icons.more_horiz,
-                        size: 20, color: Colors.grey),
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    tooltip: "terminal info",
-                    icon: const Icon(Icons.terminal_outlined, size: 20),
-                    onPressed: () {
-                      showModalBottomSheet(
-                        showDragHandle: true,
-                        backgroundColor: Colors.white,
-                        context: context,
-                        builder: (BuildContext context) {
-                          return SingleChildScrollView(
-                              child: Container(
-                            width: MediaQuery.of(context).size.width,
-                            padding: const EdgeInsets.all(16),
-                            color: Colors.white,
-                            child: Text(repository.terminalInfo,
-                                style: const TextStyle(
-                                    color: Colors.black87, fontSize: 12)),
-                          ));
-                        },
-                      );
-                    },
-                  ),
-                  //
-                  IconButton(
-                    tooltip: "git checkout .",
-                    icon: const Icon(Icons.replay, size: 20),
+                    tooltip: "edit  user",
+                    icon: const Icon(Icons.design_services, size: 20),
                     onPressed: () async {
+                      TDToast.showText('Under development', context: context);
                     },
                   ),
                   IconButton(
-                    tooltip: "git Pull",
-                    icon: const Icon(Icons.import_export, size: 20),
+                    tooltip: "delete user",
+                    icon: const Icon(Icons.delete, size: 20),
                     onPressed: () async {
+                      TDToast.showText('Under development', context: context);
                     },
                   ),
                 ],

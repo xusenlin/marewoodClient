@@ -40,12 +40,14 @@ class UseUser {
   final int id;
   final int role;
   final int status;
+  final String updatedAt;
   final String username;
 
   UseUser({
     required this.id,
     required this.role,
     required this.status,
+    required this.updatedAt,
     required this.username,
   });
 
@@ -54,6 +56,7 @@ class UseUser {
       id: json['id'],
       role: json['role'],
       status: json['status'],
+      updatedAt: json['updatedAt'],
       username: json['username'],
     );
   }

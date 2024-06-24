@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:marewood_client/models/user.dart';
+import 'package:marewood_client/pages/home/users/userCard.dart';
 
 import '../../../api/users.dart';
 import '../../../components/listPagination.dart';
@@ -27,8 +28,8 @@ class TabUserState extends  State<TabUser>{
       key: _listRenderKey,
       paginationReq: fetchUserPagination,
       itemBuilder: (context,item,refresh){
-        var u = UseUser.fromJson(item);
-        return Text(u.username);
+        var user = UseUser.fromJson(item);
+        return UserCard(user: user, onChangeData: refresh);
       },
     );
   }
