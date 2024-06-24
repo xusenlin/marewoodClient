@@ -23,7 +23,9 @@ class Pagination extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: currentPage != 1  ? onPreviousPage : null,
         ),
+        const Text('Prev    ',style: TextStyle(color: Colors.grey)),
         Text('$currentPage / $totalPages'),
+        const Text('    Next ',style: TextStyle(color: Colors.grey)),
         IconButton(
           icon: const Icon(Icons.arrow_forward),
           onPressed: currentPage != totalPages  ? onNextPage : null,

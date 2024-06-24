@@ -5,6 +5,7 @@ import 'package:marewood_client/pages/home/drawer/theme.dart';
 import 'package:marewood_client/pages/home/drawer/top.dart';
 import 'package:marewood_client/routes.dart';
 import 'package:provider/provider.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../../api/common.dart';
 import '../../../stores/themeProvider.dart';
 import '../../../stores/userProvider.dart';
@@ -40,6 +41,7 @@ class _DrawerState extends State<MainDrawer> {
       });
     }catch(e){
       if(!context.mounted)return;
+      TDToast.showText(e.toString(), context: context);
       // Navigator.of(context).pop();
       // ScaffoldMessenger.of(context).showSnackBar(
       //   SnackBar(
@@ -107,17 +109,10 @@ class _DrawerState extends State<MainDrawer> {
                               size: 24, color: primaryColor)),
                       IconButton(
                           onPressed: () {
-                            Navigator.of(context).pop();
                             Clipboard.setData(
                                 const ClipboardData(text: "https://github.com/xusenlin/marewood")
                             );
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                  width:250,
-                                  behavior: SnackBarBehavior.floating,
-                                  content: Text('The github url has been copied.')
-                              ),
-                            );
+                            TDToast.showText("The github url has been copied.", context: context);
                           },
                           tooltip: "copy github url",
                           icon: Icon(Icons.copy_all,

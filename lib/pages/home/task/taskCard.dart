@@ -6,6 +6,7 @@ import 'package:marewood_client/pages/home/task/switchBranch.dart';
 import 'package:marewood_client/stores/system.dart';
 import 'package:marewood_client/stores/user.dart';
 import 'package:provider/provider.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../../api/task.dart';
 import '../../../components/iconWithText.dart';
@@ -24,17 +25,10 @@ class TaskCard extends StatelessWidget {
       if (index == null) return;
       onChangeData();
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            behavior: SnackBarBehavior.floating,
-            content: Text("switch branch success")),
-      );
+      TDToast.showText("switch branch success", context: context);
     } catch (e) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            behavior: SnackBarBehavior.floating, content: Text(e.toString())),
-      );
+      TDToast.showText(e.toString(), context: context);
     }
   }
 
@@ -43,15 +37,11 @@ class TaskCard extends StatelessWidget {
       var msg = await runTask(task.id);
       onChangeData();
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(behavior: SnackBarBehavior.floating, content: Text(msg)),
-      );
+      TDToast.showText(msg, context: context);
+
     } catch (e) {
       if (!context.mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            behavior: SnackBarBehavior.floating, content: Text(e.toString())),
-      );
+      TDToast.showText(e.toString(), context: context);
     }
   }
   Future<void> delTask(BuildContext context) async {
@@ -59,17 +49,11 @@ class TaskCard extends StatelessWidget {
       var msg = await deleteTask(6666);
       onChangeData();
       if (!context.mounted) return;
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(behavior: SnackBarBehavior.floating, content: Text(msg)),
-      );
+      TDToast.showText(msg, context: context);
+
     } catch (e) {
       if (!context.mounted) return;
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            behavior: SnackBarBehavior.floating, content: Text(e.toString())),
-      );
+      TDToast.showText(e.toString(), context: context);
     }
   }
 
@@ -77,17 +61,10 @@ class TaskCard extends StatelessWidget {
     try {
       var file = await downloadArchive(task, type);
       if (!context.mounted) return;
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(behavior: SnackBarBehavior.floating, content: Text(file)),
-      );
+      TDToast.showText(file, context: context);
     } catch (e) {
       if (!context.mounted) return;
-      Navigator.of(context).pop();
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            behavior: SnackBarBehavior.floating, content: Text(e.toString())),
-      );
+      TDToast.showText(e.toString(), context: context);
     }
   }
 
@@ -123,29 +100,21 @@ class TaskCard extends StatelessWidget {
                           text: 'Web Asset'),
                       IconWithText(
                           click: () async {
-                            Navigator.of(context).pop();
                             var address = await SystemStore.getAddress();
                             if (address == null) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    behavior: SnackBarBehavior.floating,
-                                    content: Text("address is null")),
-                              );
+                              TDToast.showText('address is null', context: context);
                               return;
                             }
                             address += "/webs/${task.alias}";
                             Clipboard.setData(ClipboardData(text: address));
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  behavior: SnackBarBehavior.floating,
-                                  content: Text("copy $address")),
-                            );
+                            TDToast.showText("copy success", context: context);
                           },
                           icon: Icons.copy,
                           text: 'Copy Url'),
                       IconWithText(
                           click: () {
-                            Navigator.pushNamed(context, Routes.taskEdit,arguments: task);
+                            TDToast.showText('Under development', context: context);
+                            //Navigator.pushNamed(context, Routes.taskEdit,arguments: task);
                           },
                           icon: Icons.design_services,
                           text: 'Edit Task'),

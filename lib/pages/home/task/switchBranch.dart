@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:marewood_client/models/task.dart';
+import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../../api/repo.dart';
 import '../../../api/task.dart';
 
 Future<int?> switchBranch(Task task,BuildContext context) async {
   try{
+    TDToast.showLoadingWithoutText(context: context);
     List<dynamic> branch = await fetchRepositoryBranch(task.repositoryId);
-
+    TDToast.dismissLoading();
+    if(!context.mounted){
+      throw Exception("Context not mounted");
+    }
     int? i = await showDialog<int>(
       context: context,
       builder: (BuildContext context) {
@@ -33,12 +38,7 @@ Future<int?> switchBranch(Task task,BuildContext context) async {
     return i;
   }catch(e){
     if(!context.mounted) return null;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text(e.toString() )
-      ),
-    );
+    TDToast.showText(e.toString(), context: context);
     return null;
   }
 }
