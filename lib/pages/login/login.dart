@@ -24,9 +24,11 @@ class LoginState extends State<Login>{
   InputDecoration textFieldDecoration (Color themeColor,String labelText){
     return InputDecoration(
       filled: true,
-      fillColor: Colors.white.withOpacity(0.8),
-      border:  OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+      fillColor: const Color.fromARGB(255, 241, 244, 255),
+      enabledBorder: const OutlineInputBorder(
+        borderSide: BorderSide(
+          color: Colors.transparent, // 未对焦时去掉边框
+        ),
       ),
       labelText: labelText,
       focusedBorder: OutlineInputBorder(
@@ -123,7 +125,7 @@ class LoginState extends State<Login>{
                     MaterialButton(
                       color: themeProvider.themeColor,
                       textColor: Theme.of(context).colorScheme.onPrimary,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                      padding: const EdgeInsets.symmetric(vertical: 14),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
