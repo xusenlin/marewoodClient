@@ -3,6 +3,8 @@ import 'package:marewood_client/models/user.dart';
 import 'package:marewood_client/pages/home/users/status.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
+import '../../../api/users.dart';
+import '../../../components/confirmationDialog.dart';
 import '../../../stores/themeProvider.dart';
 
 class UserCard extends StatelessWidget {
@@ -102,7 +104,20 @@ class UserCard extends StatelessWidget {
                     tooltip: "delete user",
                     icon: const Icon(Icons.delete, size: 20),
                     onPressed: () async {
-                      TDToast.showText('Under development', context: context);
+                      showConfirmationDialog(
+                          context,
+                          "Delete User ${user.username}",
+                          "Are you sure you want to delete this user? This action cannot be undone.",
+                          () async {
+                            try{
+                              await deleteUser(user.id);
+                              onChangeData();
+                            }catch(e){
+                              if(!context.mounted)return;
+                              TDToast.showText(e.toString(), context: context);
+                            }
+                          }
+                      );
                     },
                   ),
                 ],

@@ -51,7 +51,6 @@ class TaskCard extends StatelessWidget {
       onChangeData();
       if (!context.mounted) return;
       TDToast.showText(msg, context: context);
-
     } catch (e) {
       if (!context.mounted) return;
       TDToast.showText(e.toString(), context: context);
@@ -81,8 +80,7 @@ class TaskCard extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             padding: const EdgeInsets.symmetric(horizontal: 20),
             color: Colors.white,
-            child:
-                Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(

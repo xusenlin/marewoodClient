@@ -68,6 +68,7 @@ flutter:
   assets:
     - assets/img/logo.png
     - assets/img/bg.png
+    - assets/img/login.png
     - assets/mock/task.json
 
   # An image asset can refer to one or more resolution-specific "variants", see

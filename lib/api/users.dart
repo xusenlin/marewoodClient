@@ -12,3 +12,13 @@ Future<PaginationData> fetchUserPagination({ int pageNum = 1,int pageSize = 10,M
 
   return PaginationData.fromJson(response.data);
 }
+
+
+Future<String> deleteUser(int id) async {
+  String endpoint = "/v1/user/${id.toString()}";
+  final response = await sendRequest(endpoint: endpoint, method: HttpMethod.delete);
+  if ( !response.status ){
+    throw Exception(response.msg);
+  }
+  return response.msg;
+}
