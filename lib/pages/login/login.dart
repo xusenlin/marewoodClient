@@ -25,8 +25,9 @@ class LoginState extends State<Login>{
     return InputDecoration(
       filled: true,
       fillColor: const Color.fromARGB(255, 241, 244, 255),
-      enabledBorder: const OutlineInputBorder(
-        borderSide: BorderSide(
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
+        borderSide: const BorderSide(
           color: Colors.transparent, // 未对焦时去掉边框
         ),
       ),
@@ -101,7 +102,7 @@ class LoginState extends State<Login>{
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+                    SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                     Image.asset("assets/img/logo.png", width: 80),
                     const SizedBox(height: 24.0),
                     Text(appName,style: TextStyle(color: themeProvider.themeColor,fontSize: 20,fontWeight: FontWeight.w700,letterSpacing:10)),
@@ -121,7 +122,7 @@ class LoginState extends State<Login>{
                       controller: addressController,
                       decoration: textFieldDecoration(themeProvider.themeColor,"Address"),
                     ),
-                    const SizedBox(height: 24.0),
+                    const SizedBox(height: 60.0),
                     MaterialButton(
                       color: themeProvider.themeColor,
                       textColor: Theme.of(context).colorScheme.onPrimary,

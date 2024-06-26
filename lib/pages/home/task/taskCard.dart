@@ -17,6 +17,8 @@ import '../../../stores/themeProvider.dart';
 class TaskCard extends StatelessWidget {
   const TaskCard({super.key, required this.task, required this.onChangeData});
 
+
+
   final Task task;
   final VoidCallback onChangeData;
 

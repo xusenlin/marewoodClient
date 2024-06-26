@@ -34,6 +34,10 @@ class _DrawerState extends State<MainDrawer> {
   }
 
   Future<void> _initMainDrawer(BuildContext context) async{
+    var userProvider = Provider.of<UserProvider>(context,listen: false);
+    if(userProvider.user==null){
+      return;
+    }
     try{
       var sys = await fetchSysInfo();
       setState(() {
@@ -42,13 +46,6 @@ class _DrawerState extends State<MainDrawer> {
     }catch(e){
       if(!context.mounted)return;
       TDToast.showText(e.toString(), context: context);
-      // Navigator.of(context).pop();
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //       behavior: SnackBarBehavior.floating,
-      //       content: Text(e.toString() )
-      //   ),
-      // );
     }
   }
 
