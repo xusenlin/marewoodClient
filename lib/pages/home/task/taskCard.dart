@@ -34,7 +34,6 @@ class TaskCard extends StatelessWidget {
       TDToast.showText(e.toString(), context: context);
     }
   }
-
   Future<void> onRunTask(BuildContext context) async {
     try {
       var msg = await runTask(task.id);
@@ -49,7 +48,7 @@ class TaskCard extends StatelessWidget {
   }
   Future<void> delTask(BuildContext context) async {
     try {
-      var msg = await deleteTask(6666);
+      var msg = await deleteTask(task.id);
       onChangeData();
       if (!context.mounted) return;
       TDToast.showText(msg, context: context);
@@ -58,7 +57,6 @@ class TaskCard extends StatelessWidget {
       TDToast.showText(e.toString(), context: context);
     }
   }
-
   Future<void> download(BuildContext context, int type) async {
     try {
       var file = await downloadArchive(task, type);

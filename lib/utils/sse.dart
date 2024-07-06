@@ -6,41 +6,54 @@ import '../stores/system.dart';
 import '../stores/user.dart';
 
 class SseClient {
-  final String endpoint;
-  final StreamController<String> _controller =
-  StreamController<String>();
+  final String _endpoint;
 
-  SseClient(this.endpoint) {
-    _connect();
-  }
+  StreamSubscription<String> ? _subscription;
+  http.Client ? _client;
 
-  Stream<String> get stream => _controller.stream;
+  SseClient(this._endpoint);
 
-  void _connect() async {
-
+  Future<void> startSubscribe(void Function(String data) onListen) async {
     var address = await SystemStore.getAddress();
     if (address == null || !address.contains("http")) {
       throw Exception("baseUrl error");
     }
     var token = await UserStore.getToken();
-    var url = Uri.parse('$address$endpoint?token=$token');
+    var url = Uri.parse('$address$_endpoint?token=$token');
 
-    final request = http.Request('GET',url)
+    final request = http.Request('GET', url)
       ..headers['Accept'] = 'text/event-stream';
 
-    final response = await http.Client().send(request);
+    _client = http.Client();
 
-    response.stream.transform(utf8.decoder).listen((event) {
+    final response = await _client?.send(request);
+
+    _subscription = response?.stream.transform(utf8.decoder).listen((event) {
       for (String line in LineSplitter.split(event)) {
-        print(line);
         if (line.startsWith('event:')) {
-          _controller.add(line.substring(6));
+          onListen(line.substring(6));
         }
       }
-    });
+    }, onError: (err) {
+      print("======");
+      print(err);
+    },onDone: (){
+      print("onDone");
+    },cancelOnError: true,
+    );
   }
 
-  void close() {
-    _controller.close();
+  void unsubscribe() {
+    // if(_subscription!=null){
+    //   _subscription?.cancel();
+    // }
+    // if(_client!=null){
+    //   try{
+    //     _client?.close();
+    //   }catch(e){
+    //     print(e);
+    //   }
+    // }
+
   }
 }

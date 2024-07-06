@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:marewood_client/pages/home/repo/status.dart';
 import 'package:provider/provider.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 import '../../../api/repository.dart';
+import '../../../components/iconWithText.dart';
 import '../../../components/terminalOutDisplay.dart';
 import '../../../models/repository.dart';
 import '../../../stores/themeProvider.dart';
@@ -13,6 +15,95 @@ class RepositoryCard extends StatelessWidget {
   final Repository repository;
   final VoidCallback onChangeData;
 
+  Future<void> delRepo(BuildContext context) async {
+    try {
+      var msg = await deleteRepo(repository.id);
+      onChangeData();
+      if (!context.mounted) return;
+      TDToast.showText(msg, context: context);
+    } catch (e) {
+      if (!context.mounted) return;
+      TDToast.showText(e.toString(), context: context);
+    }
+  }
+
+  void moreAction(BuildContext context) {
+    var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
+
+    showModalBottomSheet(
+      showDragHandle: true,
+      backgroundColor: Colors.white,
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+            width: double.infinity,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IconWithText(
+                            click: () async {
+                              Clipboard.setData(ClipboardData(text: repository.url));
+                              TDToast.showText("copy success", context: context);
+                            },
+                            icon: Icons.copy,
+                            text: 'Copy Url'),
+                        IconWithText(
+                            click: () {
+                              TDToast.showText('Under development', context: context);
+                              //Navigator.pushNamed(context, Routes.taskEdit,arguments: task);
+                            },
+                            icon: Icons.design_services,
+                            text: 'Edit Repo'),
+                        IconWithText(
+                            click: () async => await delRepo(context),
+                            icon: Icons.delete,
+                            text: 'Delete Repo'),
+                      ]),
+                ),
+                const SizedBox(height: 10),
+                const Divider(),
+                const SizedBox(height: 10),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text("TaskStatus："),
+                      Text(repository.status == 1 ? "Busy":"Leisured",
+                          style: TextStyle(color: themeProvider.themeColor)),
+                    ]),
+                const SizedBox(height: 20),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text("RepoUrl："),
+                      const SizedBox(width: 80),
+                      Flexible(
+                        child: Text(
+                          repository.url,
+                          style: TextStyle(color: themeProvider.themeColor),
+                        ),
+                      ),
+                    ]),
+                const SizedBox(height: 20),
+                const Text("Description："),
+                Padding(
+                  padding: const EdgeInsets.all(20),
+                  child: Text(repository.description),
+                )
+            ])
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +176,7 @@ class RepositoryCard extends StatelessWidget {
                         size: 20, color: Colors.grey
                     ),
                     onPressed: () {
-                      TDToast.showText('Under development', context: context);
+                      moreAction(context);
                     },
                   ),
                   IconButton(

@@ -31,7 +31,6 @@ Future<String> execGitPull(int id) async {
   if ( !response.status ){
     throw Exception(response.msg);
   }
-  var out = response.data;
   return removeTrailingNewline(response.data);
 }
 

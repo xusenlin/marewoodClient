@@ -29,24 +29,16 @@ class TabRepositoriesState extends State<TabRepositories> {
     _listRenderKey.currentState?.refresh();
   }
 
-  void subscribeRepoEvent(){
+  void subscribeRepoEvent() async {
     sseClient = SseClient('/v1/event/repository');
-    sseClient.stream.listen((data) {
+    sseClient.startSubscribe((data) {
       refresh();
-    },onError: (e){
-      if(!mounted)return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            behavior: SnackBarBehavior.floating,
-            content: Text(e.toString())
-        ),
-      );
     });
   }
 
   @override
   void dispose() {
-    sseClient.close();
+    sseClient.unsubscribe();
     super.dispose();
   }
 

@@ -33,9 +33,10 @@ class TaskListState extends  State<TabTask>{
 
 
 
-  void subscribeTaskEvent(){
+  void subscribeTaskEvent() {
     sseClient = SseClient('/v1/event/task');
-    sseClient.stream.listen((data) {
+
+    sseClient.startSubscribe((data) {
       // const eventTypeEditOk = "editOk"
       // const eventTypeDestroyOk = "destroyOk"
       // const eventTaskTypeRunOk = "runOk"
@@ -44,21 +45,20 @@ class TaskListState extends  State<TabTask>{
       // if(data=="buildOk"){
       //   fetchTasks();
       // }
+      print(data);
       refresh();
-    },onError: (e){
-      if(!mounted)return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          behavior: SnackBarBehavior.floating,
-          content: Text(e.toString())
-        ),
-      );
+    })
+        .then((r){
+    })
+        .catchError((err){
+      print(err);
     });
+
   }
 
   @override
   void dispose() {
-    sseClient.close();
+    sseClient.unsubscribe();
     super.dispose();
   }
 
