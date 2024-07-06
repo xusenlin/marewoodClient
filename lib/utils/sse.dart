@@ -1,6 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
+import 'package:eventflux/client.dart';
+import 'package:eventflux/enum.dart';
+import 'package:eventflux/models/reconnect.dart';
+import 'package:eventflux/models/response.dart';
 
 import '../stores/system.dart';
 import '../stores/user.dart';
@@ -8,8 +10,7 @@ import '../stores/user.dart';
 class SseClient {
   final String _endpoint;
 
-  StreamSubscription<String> ? _subscription;
-  http.Client ? _client;
+  EventFlux eventSource = EventFlux.spawn();
 
   SseClient(this._endpoint);
 
@@ -19,41 +20,30 @@ class SseClient {
       throw Exception("baseUrl error");
     }
     var token = await UserStore.getToken();
-    var url = Uri.parse('$address$_endpoint?token=$token');
-
-    final request = http.Request('GET', url)
-      ..headers['Accept'] = 'text/event-stream';
-
-    _client = http.Client();
-
-    final response = await _client?.send(request);
-
-    _subscription = response?.stream.transform(utf8.decoder).listen((event) {
-      for (String line in LineSplitter.split(event)) {
-        if (line.startsWith('event:')) {
-          onListen(line.substring(6));
-        }
-      }
-    }, onError: (err) {
-      print("======");
-      print(err);
-    },onDone: (){
-      print("onDone");
-    },cancelOnError: true,
+    eventSource.connect(EventFluxConnectionType.get,
+        '$address$_endpoint?token=$token',
+        onSuccessCallback: (EventFluxResponse? data) {
+          data?.stream?.listen((data) {onListen(data.data);});
+        },
+        onError: (oops) {
+          print("oops:");
+        },
+        autoReconnect: true, // Keep the party going, automatically!
+        reconnectConfig: ReconnectConfig(
+          mode: ReconnectMode.linear,
+          interval: const Duration(seconds: 1),
+          maxAttempts: 3,
+          onReconnect: () {
+            print("重新连接时执行的操作");
+            // 重新连接时执行的操作
+            // 提示：对于网络变化，`onReconnect` 将不会被调用。
+            // 它只会在连接被服务器中断并且 eventflux 尝试重新建立连接时被调用。
+          }
+        )
     );
   }
 
   void unsubscribe() {
-    // if(_subscription!=null){
-    //   _subscription?.cancel();
-    // }
-    // if(_client!=null){
-    //   try{
-    //     _client?.close();
-    //   }catch(e){
-    //     print(e);
-    //   }
-    // }
-
+    eventSource.disconnect();
   }
 }

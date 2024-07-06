@@ -49,6 +49,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.8"
+  eventflux:
+    dependency: "direct main"
+    description:
+      name: eventflux
+      sha256: c0a713e50dd3d9347d4d102e6d09584fc9494aad756ccbfbef3141f1e6371201
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.0.2"
   fake_async:
     dependency: transitive
     description:
