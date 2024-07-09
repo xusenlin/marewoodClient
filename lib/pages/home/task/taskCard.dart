@@ -4,8 +4,8 @@ import 'package:marewood_client/models/task.dart';
 import 'package:marewood_client/pages/home/task/status.dart';
 import 'package:marewood_client/pages/home/task/switchBranch.dart';
 import 'package:marewood_client/stores/system.dart';
-import 'package:marewood_client/stores/user.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:tdesign_flutter/tdesign_flutter.dart';
 
 import '../../../api/task.dart';
@@ -67,6 +67,19 @@ class TaskCard extends StatelessWidget {
       TDToast.showText(e.toString(), context: context);
     }
   }
+  Future<void> shareDistFile(BuildContext context) async {
+    try {
+      var file = await downloadArchive(task, 1);
+      await Share.shareXFiles([XFile(file)], text: "this is ${task.tag} ${task.name} build resources,commit id is ${task.commitHash}");
+
+      if (!context.mounted) return;
+      TDToast.showText(file, context: context);
+    } catch (e) {
+      if (!context.mounted) return;
+      TDToast.showText(e.toString(), context: context);
+    }
+
+  }
 
   void moreAction(BuildContext context) {
     var themeProvider = Provider.of<ThemeProvider>(context, listen: false);
@@ -121,6 +134,10 @@ class TaskCard extends StatelessWidget {
                           click: () async => await delTask(context),
                           icon: Icons.delete,
                           text: 'Delete Task'),
+                      IconWithText(
+                          click: () async => await shareDistFile(context),
+                          icon: Icons.share,
+                          text: 'Share Tar'),
                       IconWithText(
                           click: () async => await download(context, 1),
                           icon: Icons.save_alt,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:marewood_client/stores/themeProvider.dart';
 import 'package:marewood_client/stores/userProvider.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +9,7 @@ import './routes.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-
+  // debugPaintSizeEnabled = true;
   runApp(const App());
 }
 
